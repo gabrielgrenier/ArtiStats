@@ -6,7 +6,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Cache Store
+    | default Cache Store
     |--------------------------------------------------------------------------
     |
     | This option controls the default cache connection that gets used while

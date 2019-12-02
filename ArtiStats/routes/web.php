@@ -11,6 +11,13 @@
 |
 */
 
+//home
+Route::view('/', 'pages.home')->name('home');
+
+
+
+/*
 Route::get('/', function () {
     return view('welcome');
 });
+*/
