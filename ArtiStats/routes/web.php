@@ -14,6 +14,8 @@
 //home
 Route::view('/', 'pages.home')->name('home');
 
+//API
+Route::get('search/{term}', 'GeniusController@search')->name('search');
 
 
 /*
