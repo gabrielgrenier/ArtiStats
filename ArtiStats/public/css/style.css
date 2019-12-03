@@ -1,0 +1,122 @@
+.width100{
+    width: 100%;
+}
+.margin1em{
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.margin2em{
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+.margin3em{
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+.margin5em{
+    margin-top: 5em;
+    margin-bottom: 5em;
+}
+
+/* HEADER */
+#headerLogo{
+    width: 10em;
+}
+#header{
+    background-color: rgba(20,20,20,0.8);
+}
+#headerSearch{
+    background-color: transparent;
+    border-radius: 5em;
+    color: white;
+}
+#headerSearch:focus {
+    border-color: rgba(126, 239, 104, 0.8) !important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6) !important;
+    outline: 0 none;
+}
+#headerSearch::placeholder{
+    color: #c0c0c0;
+}
+
+/* HOME */
+#parallaxBoard{
+    width: 100%;
+    box-shadow: 0 0 12px 0 rgba(0,0,0,0.75);
+}
+#parallaxInfo{
+    padding-top: 5em;
+}
+#parallaxLinkCont{
+    margin-top: 5em;
+    text-align: center;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+.parallaxLink{
+    font-size: 1.5em;
+    color: white;
+    transition: 0.3s;
+}
+.parallaxLink:hover{
+    font-size: 1.6em;
+    text-decoration: none;
+    color: rgba(255,255,255, 0.5);
+}
+.parallax{
+    background-attachment: fixed;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.homeParallax{
+    background-image: url("../images/concertBackground.jpg");
+    height: 50em;
+}
+.parallaxCont{
+    padding: 15em 0 0 0;
+}
+.parallaxCont h1{
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 3em;
+}
+.parallaxCont p{
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+}
+/* FOOTER */
+#footer{
+    background-color: #131313;
+    color: #838383;
+    padding-top: 2em;
+    padding-bottom: 2em;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+}
+#footerLogo{
+    width: 10em;
+}
+.footerSideText{
+    padding-top: 0.5em;
+}
+.footerIcon{
+    margin-right: 1em;
+    font-size: 1.5em;
+    transition: 0.3s;
+}
+.footerIcon:hover{
+    padding-top: 0;
+    margin-top: -10em;
+    font-size: 1.8em;
+}
+.footerLink{
+    color: #838383;
+}
+.footerLink:hover{
+    color: #c2c2c2;
+}
