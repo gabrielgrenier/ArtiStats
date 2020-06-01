@@ -29,12 +29,12 @@
     <!-- awsome font -->
     <script src="https://kit.fontawesome.com/b280c35dd3.js"></script>
 </head>
-<body style="background-color: #f7f7f7; height: 100em!important;">
+<body style="background-color: #f7f7f7;">
 <div id="app">
     @include('default.header')
     @yield('content')
-    @stack('scripts')
     @include('default.footer')
+    @stack('scripts')
 </div>
 </body>
 </html>

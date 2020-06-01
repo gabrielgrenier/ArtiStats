@@ -31,7 +31,7 @@
 </head>
 <body >
 <div id="app">
-    @include('default.header')
+    @include('default.headerHome')
     @yield('content')
     @include('default.footer')
     @stack('scripts')
