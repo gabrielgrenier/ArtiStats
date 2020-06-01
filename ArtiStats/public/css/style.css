@@ -23,6 +23,9 @@
     width: 10em;
 }
 #header{
+    background-color: rgba(20,20,20,1);
+}
+headerHome{
     background-color: rgba(20,20,20,0.8);
 }
 #headerSearch{
@@ -89,6 +92,7 @@
     font-size: 1em;
 }
 /* FOOTER */
+
 #footer{
     background-color: #131313;
     color: #838383;
@@ -119,4 +123,45 @@
 }
 .footerLink:hover{
     color: #c2c2c2;
+}
+
+/* SEARCH */
+.search-artist-cont{
+    background-color: white;
+    height: 5em;
+    padding: 1em;
+    margin: 1em 0;
+}
+.search-artist-link:hover{
+    text-decoration: none;
+}
+
+.search-artist-link p{
+    font-family: 'Nunito', sans-serif;
+    font-size: 2em;
+    font-weight: 700;
+    color: #131313;
+    text-decoration: none;
+}
+
+.search-artist-img{
+    height: 1.5em;
+    width: 1.5em;
+    border-radius: 50%;
+    margin-top: -0.2em;
+    margin-right: 0.5em;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.page-title{
+    font-family: 'Nunito', sans-serif;
+    font-size: 5em;
+    font-weight: 700;
+}
+
+.search-artist-not-found{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2em;
 }

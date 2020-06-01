@@ -1,4 +1,4 @@
-@extends('default.layout')
+@extends('default.layoutHome')
 @section('title', 'Home')
 @section('metaOG')
 @endsection
