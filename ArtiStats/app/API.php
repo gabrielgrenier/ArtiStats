@@ -14,14 +14,28 @@ class API extends Model
     }
 
     public function filterRealArtists($artists){
+        $list = [];
+        foreach($artists as $artist){
+            $name = strtoupper($artist->artist->artist_name);
+            if(!(strpos($name, 'FEAT') || strpos($name, 'FEATURING') || strpos($name, '&') || strpos($name, ' AND '))){
+                $list[] = $artist;
+            }
+        }
+        return $list;
+    }
 
+    public function getArtistsImg($artists){
+        $images = [];
+        foreach($artists as $artist){
+            $images[] = 'https://static01.nyt.com/images/2018/06/19/arts/19xxx/19xxx-superJumbo-v2.jpg';
+        }
+        return $images;
     }
 
     public function searchArtist($name){
         $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.search?format=jsonp&callback=callback&q_artist='.$name.'&apikey='.$this->getApiKey());
         if($response->ok()) {
             $images = [];
-            $artists = [];
             $response_json = str_replace('callback(', '', $response->body());
             $response_json = str_replace(');', '', $response_json);
             $response_json = json_decode($response_json)->message->body->artist_list;
@@ -31,14 +45,11 @@ class API extends Model
                 return $a->artist->artist_rating > $b->artist->artist_rating ? -1 : 1;
             });
 
-            //get real artists and imgs
-            foreach($response_json as $artist){
-                $name = strtoupper($artist->artist->artist_name);
-                if(!(strpos($name, 'FEAT') || strpos($name, 'FEATURING') || strpos($name, '&') || strpos($name, ' AND '))){
-                    $images[] = 'https://static01.nyt.com/images/2018/06/19/arts/19xxx/19xxx-superJumbo-v2.jpg';
-                    $artists[] = $artist;
-                }
-            }
+            //get real artists (API is dumb and features count as artists otherwise)
+            $artists = $this->filterRealArtists($response_json);
+
+            //get artist imgs
+            $images = $this->getArtistsImg($artists);
 
             $data['artists'] = $artists;
             $data['imgs'] = $images;
