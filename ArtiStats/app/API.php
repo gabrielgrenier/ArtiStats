@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Http;
 
 class API extends Model
 {
-    private $api_key = 'YOUR_KEY';
+    private $musix_api_key = 'YOUR_KEY';
 
-    public function getApiKey(){
-        return $this->api_key;
+    public function getMusixApiKey(){
+        return $this->musix_api_key;
     }
 
     public function filterRealArtists($artists){
@@ -33,7 +33,7 @@ class API extends Model
     }
 
     public function searchArtist($name){
-        $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.search?format=jsonp&callback=callback&q_artist='.$name.'&apikey='.$this->getApiKey());
+        $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.search?format=jsonp&callback=callback&q_artist='.$name.'&apikey='.$this->getMusixApiKey());
         if($response->ok()) {
             $images = [];
             $response_json = str_replace('callback(', '', $response->body());
