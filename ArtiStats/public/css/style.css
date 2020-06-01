@@ -91,6 +91,19 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 1em;
 }
+
+.section-white h1{
+    color: #131313;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 3em;
+}
+.section-white p{
+    color: #131313;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+}
+
 /* FOOTER */
 
 #footer{
