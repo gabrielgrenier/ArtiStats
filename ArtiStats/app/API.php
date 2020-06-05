@@ -20,7 +20,7 @@ class API extends Model
         $list = [];
         foreach($artists as $artist){
             $name = strtoupper($artist->artist->artist_name);
-            if(!(strpos($name, 'FEAT') || strpos($name, 'FEATURING') || strpos($name, '&') || strpos($name, ' AND '))){
+            if(!(strpos($name, 'FEAT') || strpos($name, 'FEATURING') || strpos($name, '&') || strpos($name, ' AND ') || strpos($name, 'FT.'))){
                 $list[] = $artist;
             }
         }
@@ -38,6 +38,8 @@ class API extends Model
 
         return $images;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function searchArtist($name){
         $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.search?format=jsonp&callback=callback&q_artist='.$name.'&apikey='.$this->getMusixApiKey());
@@ -68,13 +70,41 @@ class API extends Model
         return null;
     }
 
-    public function getArtist($id){
-        $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.get?format=jsonp&callback=callback&artist_id='.$id.'&apikey=858a5945700cb1dc92dd0591fb886f1c'.$this->getApiKey());
+    public function getArtist($name){
+        $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.search?format=jsonp&callback=callback&q_artist='.$name.'&apikey='.$this->getMusixApiKey());
         if($response->ok()) {
             $response_json = str_replace('callback(', '', $response->body());
             $response_json = str_replace(');', '', $response_json);
-            return json_decode($response_json)->message->body->artist_list;
+            $response_json = json_decode($response_json)->message->body->artist_list;
+            return $response_json[0]->artist;
         }
+        //add check if there is more than 1 artist or 0, return 404
+
         return null;
+    }
+
+    public function getProfilePictures($name){
+        $images_list = GoogleImageGrabber::grab($name);
+        while(sizeof($images_list)<5)
+            $images_list = GoogleImageGrabber::grab($name);
+
+        $images[] = $images_list[0]['url'];
+        $images[] = $images_list[1]['url'];
+
+        /*
+        $index1 = rand(0, 10);
+        $images[] = $images_list[$index1]['url'];
+
+        $index2 = rand(0, 10);
+        if($index2===$index1){
+            while($index2===$index1){
+                $index2 = rand(0, 10);
+            }
+        }
+        $images[] = $images_list[$index2]['url'];
+        */
+
+
+        return $images;
     }
 }

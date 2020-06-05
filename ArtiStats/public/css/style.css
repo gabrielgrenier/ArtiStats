@@ -103,6 +103,37 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 1em;
 }
+.section-dark{
+    background-color: #131313;
+}
+.section-dark h1{
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 3em;
+}
+.section-dark p{
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+}
+.section-dark a{
+    color: white;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.section-dark a:hover{
+    color: lightblue;
+    text-decoration: none;
+}
+
+.white-border-img{
+    border-style: solid;
+    border-color: white;
+    border-width: 2px;
+    border-radius: 5px;
+}
 
 /* FOOTER */
 
@@ -177,4 +208,30 @@
 .search-artist-not-found{
     font-family: 'Montserrat', sans-serif;
     font-size: 2em;
+}
+
+/* PROFILE */
+.profile-header{
+    height: 10em;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.profile-body{
+    background-color: white;
+}
+
+.profile-picture{
+    height: 10em;
+    width: 10em;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-style: solid;
+    border-width: 3px;
+    border-color: white;
+    margin: -6em auto auto auto;
 }
