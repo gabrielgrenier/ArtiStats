@@ -4,10 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
+use Goutte\Client;
+use Buchin\GoogleImageGrabber\GoogleImageGrabber;
+
 
 class API extends Model
 {
-    private $musix_api_key = 'YOUR_KEY';
+    private $musix_api_key = '858a5945700cb1dc92dd0591fb886f1c';
 
     public function getMusixApiKey(){
         return $this->musix_api_key;
@@ -26,9 +29,13 @@ class API extends Model
 
     public function getArtistsImg($artists){
         $images = [];
+        $client = new Client();
+
         foreach($artists as $artist){
-            $images[] = 'https://static01.nyt.com/images/2018/06/19/arts/19xxx/19xxx-superJumbo-v2.jpg';
+            $crawler = $client->request('GET', 'https://www.google.com/search?q='.$artist->artist->artist_name.'&tbm=isch');
+            $images[] = $crawler->filter('div > img')->first()->attr('src');
         }
+
         return $images;
     }
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\API;
 use Illuminate\Http\Request;
 
-class MusixController extends Controller{
+class ApiController extends Controller{
 
     public function searchArtist($name){
         $api = new API();

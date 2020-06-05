@@ -98,6 +98,16 @@
       <path value="$PROJECT_DIR$/ArtiStats/vendor/ramsey/collection" />
       <path value="$PROJECT_DIR$/ArtiStats/vendor/brick/math" />
       <path value="$PROJECT_DIR$/ArtiStats/vendor/psr/event-dispatcher" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/symfony/http-client" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/symfony/browser-kit" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/symfony/http-client-contracts" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/symfony/dom-crawler" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/fabpot/goutte" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/thesoftwarefanatics/php-html-parser" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/maciejczyzewski/bottomline" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/paquettg/string-encode" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/buchin/google-image-grabber" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/campo/random-user-agent" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

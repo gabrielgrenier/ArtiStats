@@ -5,7 +5,7 @@
 Route::view('/', 'pages.home')->name('home');
 
 //API
-Route::get('search/{name}', 'MusixController@searchArtist')->name('ArtistSearch');
-Route::get('search', 'MusixController@emptySearch')->name('ArtistSearch');
-Route::post('format/search', 'MusixController@formatSearch')->name('FormatSearch');
+Route::get('search/{name}', 'ApiController@searchArtist')->name('ArtistSearch');
+Route::get('search', 'ApiController@emptySearch')->name('ArtistSearch');
+Route::post('format/search', 'ApiController@formatSearch')->name('FormatSearch');
 

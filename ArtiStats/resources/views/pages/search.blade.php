@@ -7,10 +7,10 @@
         <div class="page-title">Results</div>
         @if($data !== null)
             @php $index = 0; @endphp
-            @foreach($data['artists'] as $artists)
+            @foreach($data['artists'] as $artist)
                 <a href="#" class="search-artist-link">
                     <div class="search-artist-cont">
-                        <p><img style="background-image: url({{$data['imgs'][$index]}});" class="search-artist-img" />{{$artists->artist->artist_name}}</p>
+                        <p><img style="background-image: url({{$data['imgs'][$index]}});" class="search-artist-img" />{{$artist->artist->artist_name}}</p>
                     </div>
                 </a>
                 @php $index++; @endphp
