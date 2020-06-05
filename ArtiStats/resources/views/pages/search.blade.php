@@ -1,5 +1,5 @@
 @extends('default.layout')
-@section('title', 'Home')
+@section('title', 'Search')
 @section('metaOG')
 @endsection
 @section('content')

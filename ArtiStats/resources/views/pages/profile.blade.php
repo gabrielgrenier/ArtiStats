@@ -1,5 +1,5 @@
 @extends('default.layout')
-@section('title', 'Home')
+@section('title', $artist->artist_name)
 @section('metaOG')
 @endsection
 @section('content')
@@ -10,6 +10,9 @@
             <div class="profile-picture" style="background-image: url({{$imgs[0]}}) !important;"></div>
             <div class="text-center">
                 <h1>{{$artist->artist_name}}</h1>
+                @if($artist->artist_name === '6ix9ine')
+                    <i>AKA 6nitch 9ine</i>
+                @endif
             </div>
         </div>
     </div>
