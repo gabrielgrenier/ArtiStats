@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\API;
-use Illuminate\Http\Request;
 
 class ApiController extends Controller{
 
     //SEARCH
     public function searchArtist($name){
         $api = new API();
+        $api->setupApi();
         $data = $api->searchArtist($name);
 
 
         if($data !== null && sizeof($data['artists']) === 1)
-            return redirect('format/profile/'.$data['artists'][0]->artist->artist_name);
+            return redirect('format/profile/'.$data['artists'][0]->name);
 
         return view('pages.search', ['data' => $data]);
     }
@@ -31,7 +31,15 @@ class ApiController extends Controller{
     //PROFILE
     public function profileArtist($name){
         $api = new API();
-        $artist = $api->getArtist($name);
+        $api->setupApi();
+        $artist = $api->searchArtist($name)['artists'];
+
+        if(sizeof($artist)>1){
+            $term = str_replace(' ', '-', $name);
+            return redirect('search/'.$term);
+        }
+
+        $artist = $artist[0];
         $images = $api->getProfilePictures($name);
 
         return view('pages.profile', ['artist' => $artist, 'imgs' => $images]);

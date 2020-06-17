@@ -8,9 +8,9 @@
         @if($data !== null)
             @php $index = 0; @endphp
             @foreach($data['artists'] as $artist)
-                <a href="{{url('format/profile/'.$artist->artist->artist_name)}}" class="search-artist-link">
+                <a href="{{url('format/profile/'.$artist->name)}}" class="search-artist-link">
                     <div class="search-artist-cont">
-                        <p><img style="background-image: url({{$data['imgs'][$index]}});" class="search-artist-img" />{{$artist->artist->artist_name}}</p>
+                        <p><img style="background-image: url({{$artist->images[2]->url}});" class="search-artist-img" />{{$artist->name}}</p>
                     </div>
                 </a>
                 @php $index++; @endphp

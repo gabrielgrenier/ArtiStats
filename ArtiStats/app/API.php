@@ -3,25 +3,42 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
 use Goutte\Client;
 use Buchin\GoogleImageGrabber\GoogleImageGrabber;
-
+use SpotifyWebAPI\Session;
+use SpotifyWebAPI\SpotifyWebAPI;
 
 class API extends Model
 {
-    private $musix_api_key = '858a5945700cb1dc92dd0591fb886f1c';
+    private $spotify_client_id = '4a375a1bc9ce48bf819c19afa407a45b';
+    private $spotify_client_secret = '27d08ad55c0d4fc483c298d0e22a8790';
 
-    public function getMusixApiKey(){
-        return $this->musix_api_key;
+    private $session;
+    private $api;
+
+    public function setupApi(){
+        $this->session = new Session(
+            $this->spotify_client_id,
+            $this->spotify_client_secret
+        );
+        $this->session->requestCredentialsToken();
+        $accessToken = $this->session->getAccessToken();
+
+        $this->api = new SpotifyWebAPI();
+        $this->api->setAccessToken($accessToken);
     }
 
     public function filterRealArtists($artists){
         $list = [];
+
         foreach($artists as $artist){
-            $name = strtoupper($artist->artist->artist_name);
-            if(!(strpos($name, 'FEAT') || strpos($name, 'FEATURING') || strpos($name, '&') || strpos($name, ' AND ') || strpos($name, 'FT.'))){
-                $list[] = $artist;
+            $name = strtoupper($artist->name);
+            if(!(strpos($name, 'FEAT') || strpos($name, 'FEATURING')
+                || strpos($name, '&') || strpos($name, ' AND ') || strpos($name, 'BY')
+                || strpos($name, 'FT.') || strpos($name, 'PROD.') || strpos($name, 'PROD'))){
+
+                if($artist->popularity>=50)
+                    $list[] = $artist;
             }
         }
         return $list;
@@ -42,45 +59,24 @@ class API extends Model
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function searchArtist($name){
-        $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.search?format=jsonp&callback=callback&q_artist='.$name.'&apikey='.$this->getMusixApiKey());
-        if($response->ok()) {
-            $images = [];
-            $response_json = str_replace('callback(', '', $response->body());
-            $response_json = str_replace(');', '', $response_json);
-            $response_json = json_decode($response_json)->message->body->artist_list;
+        $results = $this->api->search($name, 'artist');
+        $artists = $this->filterRealArtists($results->artists->items);
 
-            //sort by artist score
-            usort($response_json, function($a, $b) {
-                return $a->artist->artist_rating > $b->artist->artist_rating ? -1 : 1;
-            });
-
-            //get real artists (API is dumb and features count as artists otherwise)
-            $artists = $this->filterRealArtists($response_json);
-
-            //get artist imgs
-            $images = $this->getArtistsImg($artists);
-
-            $data['artists'] = $artists;
-            $data['imgs'] = $images;
-            $data['term'] = $name;
-
-            if(sizeof($response_json)>0)
-                return $data;
+        if(sizeof($artists)<=0){
+            return null;
         }
-        return null;
+
+        $data['artists'] = $artists;
+        $data['term'] = $name;
+
+        return $data;
     }
 
     public function getArtist($name){
-        $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.search?format=jsonp&callback=callback&q_artist='.$name.'&apikey='.$this->getMusixApiKey());
-        if($response->ok()) {
-            $response_json = str_replace('callback(', '', $response->body());
-            $response_json = str_replace(');', '', $response_json);
-            $response_json = json_decode($response_json)->message->body->artist_list;
-            return $response_json[0]->artist;
-        }
-        //add check if there is more than 1 artist or 0, return 404
+        $results = $this->api->search($name, 'artist');
+        $artist = $this->filterRealArtists($results->artists->items)[0];
 
-        return null;
+        return $artist;
     }
 
     public function getProfilePictures($name){
@@ -107,4 +103,5 @@ class API extends Model
 
         return $images;
     }
+
 }

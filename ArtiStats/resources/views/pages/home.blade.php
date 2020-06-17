@@ -50,9 +50,6 @@
     <div class="container-fluid section-dark" id="OpenSource">
         <div class="container">
             <div class="row py-5">
-                <div class="col-md-7 text-center">
-                    <img src="{{asset('images/code_home.png')}}" class="w-75 white-border-img"/>
-                </div>
                 <div class="col-md-5">
                     <h1>Open Source</h1>
                     <p>
@@ -60,6 +57,9 @@
                         <a href="https://github.com/gabrielgrenier/ArtiStats" target="_blank">GitHub</a>
                         and use it as you please.
                     </p>
+                </div>
+                <div class="col-md-7 text-center">
+                    <img src="{{asset('images/code_home.png')}}" class="w-75 white-border-img"/>
                 </div>
             </div>
         </div>

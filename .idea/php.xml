@@ -108,6 +108,7 @@
       <path value="$PROJECT_DIR$/ArtiStats/vendor/paquettg/string-encode" />
       <path value="$PROJECT_DIR$/ArtiStats/vendor/buchin/google-image-grabber" />
       <path value="$PROJECT_DIR$/ArtiStats/vendor/campo/random-user-agent" />
+      <path value="$PROJECT_DIR$/ArtiStats/vendor/jwilsson/spotify-web-api-php" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Route;
 
 //home
 Route::view('/', 'pages.home')->name('home');
@@ -12,3 +12,4 @@ Route::post('format/search', 'ApiController@formatSearch')->name('FormatSearch')
 //PROFILE
 Route::get('profile/{name}', 'ApiController@profileArtist')->name('ArtistSearch');
 Route::get('format/profile/{name}', 'ApiController@formatProfile')->name('FormatSearch');
+
