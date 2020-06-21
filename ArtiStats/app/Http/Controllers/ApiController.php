@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\API;
+use http\Env\Request;
 
 class ApiController extends Controller{
 
@@ -40,9 +41,13 @@ class ApiController extends Controller{
         }
 
         $artist = $artist[0];
-        $images = $api->getProfilePictures($name);
-
-        return view('pages.profile', ['artist' => $artist, 'imgs' => $images]);
+        $albums = $api->getAlbums($artist->id);
+        $total_songs = 0;
+        foreach($albums as $album){
+            $total_songs += $album->total_tracks;
+        }
+        $wikipedia_link = 'https://en.wikipedia.org/wiki/'.str_replace(' ', '_', $artist->name);
+        return view('pages.profile', ['artist' => $artist, 'albums' => $albums, 'total_songs' => $total_songs, 'wikipedia_link' => $wikipedia_link]);
     }
 
     public function formatProfile($name){

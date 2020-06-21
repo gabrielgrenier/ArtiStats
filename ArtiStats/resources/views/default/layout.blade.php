@@ -28,6 +28,10 @@
 
     <!-- awsome font -->
     <script src="https://kit.fontawesome.com/b280c35dd3.js"></script>
+
+    <!-- ajax -->
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 </head>
 <body style="background-color: #f7f7f7;">
 <div id="app">

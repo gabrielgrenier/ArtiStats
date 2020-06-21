@@ -10,8 +10,8 @@ use SpotifyWebAPI\SpotifyWebAPI;
 
 class API extends Model
 {
-    private $spotify_client_id = 'CLIENT';
-    private $spotify_client_secret = 'SECRET';
+    private $spotify_client_id = '';
+    private $spotify_client_secret = '';
 
     private $session;
     private $api;
@@ -77,6 +77,22 @@ class API extends Model
         $artist = $this->filterRealArtists($results->artists->items)[0];
 
         return $artist;
+    }
+
+    public function getAlbums($id){
+        $albums = $this->api->getArtistAlbums($id, ['album_type' => 'album'])->items;
+        $albums_unique = [];
+        foreach($albums as $album){
+            $count = 0;
+            foreach($albums_unique as $album_unique){
+                if($album->name===$album_unique->name)
+                    $count++;
+            }
+            if($count===0)
+                $albums_unique[] = $album;
+        }
+
+        return $albums_unique;
     }
 
     public function getProfilePictures($name){
