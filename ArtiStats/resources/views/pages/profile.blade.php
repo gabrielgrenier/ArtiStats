@@ -16,7 +16,7 @@
                 @if($artist->name === '6ix9ine')
                     <i>AKA 6nitch 9ine</i>
                 @endif
-                <a href="{{$artist->external_urls->spotify}}" class="profile-link mr-2" style="">Spotify</a> <a href="{{$wikipedia_link}}" class="profile-link">Wikipedia</a>
+                <a href="{{$artist->external_urls->spotify}}" class="profile-link mr-2" target="_blank">Spotify</a> <a href="{{$wikipedia_link}}" class="profile-link" target="_blank">Wikipedia</a>
             </div>
 
             <div class="my-5">
