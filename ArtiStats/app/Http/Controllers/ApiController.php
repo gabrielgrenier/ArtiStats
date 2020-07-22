@@ -42,12 +42,14 @@ class ApiController extends Controller{
 
         $artist = $artist[0];
         $albums = $api->getAlbums($artist->id);
+        $top_tracks = $api->getArtistTopTrack($artist->id)->tracks;
+
         $total_songs = 0;
         foreach($albums as $album){
             $total_songs += $album->total_tracks;
         }
         $wikipedia_link = 'https://en.wikipedia.org/wiki/'.str_replace(' ', '_', $artist->name);
-        return view('pages.profile', ['artist' => $artist, 'albums' => $albums, 'total_songs' => $total_songs, 'wikipedia_link' => $wikipedia_link]);
+        return view('pages.profile', ['artist' => $artist, 'albums' => $albums, 'total_songs' => $total_songs, 'wikipedia_link' => $wikipedia_link, 'top_tracks' => $top_tracks]);
     }
 
     public function formatProfile($name){

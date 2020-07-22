@@ -10,8 +10,8 @@ use SpotifyWebAPI\SpotifyWebAPI;
 
 class API extends Model
 {
-    private $spotify_client_id = '';
-    private $spotify_client_secret = '';
+    private $spotify_client_id = 'key';
+    private $spotify_client_secret = 'key';
 
     private $session;
     private $api;
@@ -93,6 +93,10 @@ class API extends Model
         }
 
         return $albums_unique;
+    }
+
+    public function getArtistTopTrack($id){
+        return $this->api->getArtistTopTracks($id, ['country' => 'US']);
     }
 
     public function getProfilePictures($name){

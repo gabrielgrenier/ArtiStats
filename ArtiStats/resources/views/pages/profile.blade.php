@@ -9,7 +9,7 @@
         </div>
         <div class="profile-body p-3 mb-5">
             <div class="text-center">
-                <img class="profile-picture" src="{{$artist->images[1]->url}}" />
+                <div class="profile-picture" style="background-image: url('{{$artist->images[1]->url}}')"></div>
             </div>
             <div class="text-center">
                 <h1 class="text-bold">{{$artist->name}}</h1>
@@ -23,7 +23,12 @@
                 <h2 class="text-bold">Information</h2>
                 <div class="under-line-block mb-4"></div>
                 <p class="information-sub">
-                    <b>Genres : </b>
+                    @if(sizeof($artist->genres) <= 1)
+                        <b>Genre : </b>
+                    @else
+                        <b>Genres : </b>
+                    @endif
+
                     @php($index=0)
                     @foreach($artist->genres as $genre)
                         @if($index!==sizeof($artist->genres)-1)
@@ -52,19 +57,49 @@
                 </p>
             </div>
 
-            <div class="my-5">
-                <h2 class="text-bold">Albums</h2>
-                <div class="under-line-block mb-4"></div>
-                <div class="row">
-                    @foreach($albums as $album)
-                        <div class="col-lg-3 mb-4">
-                            <a href="https://www.google.com" class="profile-album-link">
-                                <img src="{{$album->images[0]->url}}" class="albumThumbnail"/>
-                            </a>
-                        </div>
-                    @endforeach
+            @if(sizeof($albums) != 0 && $albums != null)
+                <div class="my-5">
+                    <h2 class="text-bold">Albums</h2>
+                    <div class="under-line-block mb-4"></div>
+                    <div class="row">
+                        @foreach($albums as $album)
+                            <div class="col-lg-3 mb-4">
+                                <a href="https://www.google.com" class="profile-album-link">
+                                    <img src="{{$album->images[0]->url}}" class="albumThumbnail"/>
+                                    <h5 class="mt-2">{{$album->name}}</h5>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-            </div>
+            @endif
+            @if(sizeof($top_tracks) != 0 && $top_tracks != null)
+                <div class="my-3">
+                    <h2 class="text-bold">Top Tracks</h2>
+                    <div class="under-line-block mb-4"></div>
+                    <table class="table">
+                        <tbody>
+                        @foreach($top_tracks as $top_track)
+                            <tr>
+                                <td><img src="{{$top_track->album->images[2]->url}}" class="top-track-img"></td>
+                                <td>
+                                    <a href="#" class="profile-link"><h5 class="text-bold top-track-margin">{{$top_track->name}}</h5></a>
+                                </td>
+                                <td>
+                                    @if($top_track->explicit === true)
+                                        <div class="top-track-margin">
+                                            <span class="explicit-cont">Explicit</span>
+                                        </div>
+                                    @endif
+                                </td>
+                                <td><h5 class="text-bold top-track-margin">{{explode('-', $top_track->album->release_date)[0]}}</h5></td>
+                                <td><i class="fas fa-play-circle"></i></td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
     </div>
 
