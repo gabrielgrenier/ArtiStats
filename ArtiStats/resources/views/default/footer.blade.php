@@ -4,13 +4,11 @@
             © ArtiStats
         </div>
         <div class="col-lg-4">
-            <img src="{{asset('images/logoWhite.png')}}" id="footerLogo">
+            <a href="{{url('/')}}"><img src="{{asset('images/logoWhite.png')}}" id="footerLogo"></a>
         </div>
         <div class="col-lg-4 footerSideText">
-            <a href="https://twitter.com/MrQu4ker" class="footerLink"><i class="fab fa-twitter footerIcon"></i></a>
-            <a href="https://steamcommunity.com/id/Marcelleboeuf" class="footerLink"><i class="fab fa-steam-symbol footerIcon"></i></a>
-            <a href="https://www.reddit.com/user/ScrubZL0rd" class="footerLink"><i class="fab fa-reddit-alien footerIcon"></i></a>
-            <a href="https://github.com/gabrielgrenier/ArtiStats" class="footerLink"><i class="fab fa-github footerIcon"></i></a>
+            <a href="https://www.linkedin.com/in/gabriel-braun-grenier-77375b121/" class="footerLink" target="_blank"><i class="fab fa-linkedin-in footerIcon"></i></a>
+            <a href="https://github.com/gabrielgrenier/ArtiStats" class="footerLink" target="_blank"><i class="fab fa-github footerIcon"></i></a>
         </div>
     </div>
 </div>

@@ -9,8 +9,7 @@
         <div class="container-fluid">
             <div class="parallaxCont">
                 <div class="row">
-                    <div class="col-lg-2"></div><!-- pad -->
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 offset-lg-2">
                         <img  src="{{asset('images/statsBoardPlace.jpg')}}" id="parallaxBoard">
                     </div>
                     <div class="col-lg-4" id="parallaxInfo">
@@ -78,7 +77,35 @@
             </div>
         </div>
     </div>
-    <!-- add call to action -->
+
+    <div class="width100 parallax cta-parallax py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
+                    <h1>Start getting more stats about your music now!</h1>
+                </div>
+                <div class="col-lg-5">
+                    <div class="cta-cont-top pt-2 pb-1 px-2 text-right">
+                        <div class="cta-circle" style="background-color: #6EFF57;"></div>
+                        <div class="cta-circle" style="background-color: #FFFF5D;"></div>
+                        <div class="cta-circle" style="background-color: #FF514B;"></div>
+                    </div>
+                    <div class="cta-cont px-4 py-3">
+                        <form>
+                            <div class="form-group">
+                                <label for="name" class="text-bold">Artist's name</label>
+                                <input type="email" class="form-control" id="name" name="name" placeholder="XXXTentacion, Juice WRLD, ...">
+                                <small id="emailHelp" class="form-text text-muted">If the artist is on Spotify we'll find it</small>
+                                <div class="text-center mt-4">
+                                    <input type="submit" value="Search" class="cta-btn" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 @endsection
 @push('scripts')

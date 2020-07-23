@@ -14,7 +14,7 @@
             <div class="text-center">
                 <h1 class="text-bold">{{$artist->name}}</h1>
                 @if($artist->name === '6ix9ine')
-                    <i>AKA 6nitch 9ine</i>
+                    <i>AKA 6nitch 9ine</i><br/>
                 @endif
                 <a href="{{$artist->external_urls->spotify}}" class="profile-link mr-2" target="_blank">Spotify</a> <a href="{{$wikipedia_link}}" class="profile-link" target="_blank">Wikipedia</a>
             </div>
@@ -77,13 +77,16 @@
                 <div class="my-3">
                     <h2 class="text-bold">Top Tracks</h2>
                     <div class="under-line-block mb-4"></div>
-                    <table class="table">
+                    <table class="table table-tracks-hover">
                         <tbody>
+                        <?php $index=0 ?>
                         @foreach($top_tracks as $top_track)
+                            <?php $index++ ?>
                             <tr>
+                                <td style="width: 2.5em;"><h5 class="text-bold top-track-margin">{{$index}}</h5></td>
                                 <td><img src="{{$top_track->album->images[2]->url}}" class="top-track-img"></td>
                                 <td>
-                                    <a href="#" class="profile-link"><h5 class="text-bold top-track-margin">{{$top_track->name}}</h5></a>
+                                    <h5 class="text-bold top-track-margin"><a href="#" class="profile-link">{{$top_track->name}}</a></h5>
                                 </td>
                                 <td>
                                     @if($top_track->explicit === true)
@@ -93,7 +96,7 @@
                                     @endif
                                 </td>
                                 <td><h5 class="text-bold top-track-margin">{{explode('-', $top_track->album->release_date)[0]}}</h5></td>
-                                <td><i class="fas fa-play-circle"></i></td>
+                                <td><a href="https://open.spotify.com/album/{{$top_track->album->id}}" class="top-track-play-btn" target="_blank"><i class="fas fa-play-circle"></i></a></td>
                             </tr>
                         @endforeach
                         </tbody>

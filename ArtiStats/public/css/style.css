@@ -77,6 +77,48 @@
     background-image: url("../images/concertBackground.jpg");
     height: 50em;
 }
+.cta-parallax{
+    background-image: url("../images/concertBackground.jpg");
+    font-family: 'Montserrat', sans-serif;
+}
+
+.cta-circle{
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.cta-btn{
+    border-style: solid;
+    border-width: 3px;
+    border-color: #00d461;
+    width: 7em;
+    border-radius: 1em;
+    background-color: #00d461;
+    color: white;
+    font-weight: 800;
+    font-size: 1.2em;
+    transition: 0.3s;
+}
+.cta-btn:hover{
+    background-color: white;
+    color: #00d461;
+}
+
+.cta-parallax h1{
+    font-weight: 800;
+    color: white;
+}
+.cta-cont-top{
+    background-color: #BDBDBD;
+    border-radius: 15px 15px 0 0;
+}
+.cta-cont{
+    background-color: white;
+    color: #212121;
+}
+
 .parallaxCont{
     padding: 15em 0 0 0;
 }
@@ -314,4 +356,20 @@
     border-radius: 5px;
     font-weight: bold;
     color: #BDBDBD;
+}
+
+.top-track-play-btn{
+    color: #00d461;
+    font-size: 2em;
+    transition: 0.3s;
+}
+.top-track-play-btn:hover{
+    color: #00B551;
+}
+
+.table-tracks-hover tr{
+    transition: 0.2s;
+}
+.table-tracks-hover tr:hover{
+    background-color: #ECFEE6;
 }
