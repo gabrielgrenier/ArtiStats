@@ -36,7 +36,7 @@
             <div class="col-md-7">
                 <img src="{{asset('images/juice_home.png')}}" class="w-100"/>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5 m-auto">
                 <h1>More Statistics</h1>
                 <p>
                     have you ever wanted to know more information about the music
@@ -49,7 +49,7 @@
     <div class="container-fluid section-dark" id="OpenSource">
         <div class="container">
             <div class="row py-5">
-                <div class="col-md-5">
+                <div class="col-md-5 m-auto">
                     <h1>Open Source</h1>
                     <p>
                         ArtiStat is a open source project which means you can find our code on
@@ -68,7 +68,7 @@
             <div class="col-md-7">
                 <img src="{{asset('images/x17Homepage.png')}}" class="w-100"/>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5 m-auto">
                 <h1>All of your favorite artists</h1>
                 <p>
                     We are using Musixmatch's API to bring
@@ -78,10 +78,10 @@
         </div>
     </div>
 
-    <div class="width100 parallax cta-parallax py-5">
+    <div class="width100 parallax cta-parallax">
         <div class="container">
             <div class="row">
-                <div class="col-lg-7">
+                <div class="col-lg-7" style="margin: auto">
                     <h1>Start getting more stats about your music now!</h1>
                 </div>
                 <div class="col-lg-5">
@@ -91,15 +91,16 @@
                         <div class="cta-circle" style="background-color: #FF514B;"></div>
                     </div>
                     <div class="cta-cont px-4 py-3">
-                        <form>
+                        <form action="{{url('format/search')}}" method="post">
                             <div class="form-group">
                                 <label for="name" class="text-bold">Artist's name</label>
-                                <input type="email" class="form-control" id="name" name="name" placeholder="XXXTentacion, Juice WRLD, ...">
+                                <input type="text" class="form-control" id="name" name="term" placeholder="XXXTentacion, Juice WRLD, ...">
                                 <small id="emailHelp" class="form-text text-muted">If the artist is on Spotify we'll find it</small>
                                 <div class="text-center mt-4">
                                     <input type="submit" value="Search" class="cta-btn" />
                                 </div>
                             </div>
+                            @csrf
                         </form>
                     </div>
                 </div>

@@ -78,7 +78,8 @@
     height: 50em;
 }
 .cta-parallax{
-    background-image: url("../images/concertBackground.jpg");
+    padding: 6em 0;
+    background-image: url("../images/notepad.png");
     font-family: 'Montserrat', sans-serif;
 }
 
