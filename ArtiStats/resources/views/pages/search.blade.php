@@ -4,7 +4,8 @@
 @endsection
 @section('content')
     <div class="container">
-        <div class="page-title">Results</div>
+        <div class="page-title mb-0">Results</div>
+        <div class="under-line-block-lg mb-4"></div>
         @if($data !== null)
             @php $index = 0; @endphp
             @foreach($data['artists'] as $artist)

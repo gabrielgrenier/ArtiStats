@@ -8,6 +8,8 @@ use http\Env\Request;
 class ApiController extends Controller{
 
     //SEARCH
+
+    //Search an artist
     public function searchArtist($name){
         $api = new API();
         $api->setupApi();
@@ -20,16 +22,20 @@ class ApiController extends Controller{
         return view('pages.search', ['data' => $data]);
     }
 
+    //Search if no term
     public function emptySearch(){
         return view('pages.search', ['data' => null]);
     }
 
+    //Format search url
     public function formatSearch(){
         $term = str_replace(' ', '-', request('term'));
         return redirect('search/'.$term);
     }
 
     //PROFILE
+
+    //Show profile
     public function profileArtist($name){
         $api = new API();
         $api->setupApi();
@@ -43,15 +49,24 @@ class ApiController extends Controller{
         $artist = $artist[0];
         $albums = $api->getAlbums($artist->id);
         $top_tracks = $api->getArtistTopTrack($artist->id)->tracks;
+        $related_artists = array_slice($api->getRelatedArtists($artist->id)->artists, 0, 6, true);
 
         $total_songs = 0;
         foreach($albums as $album){
             $total_songs += $album->total_tracks;
         }
         $wikipedia_link = 'https://en.wikipedia.org/wiki/'.str_replace(' ', '_', $artist->name);
-        return view('pages.profile', ['artist' => $artist, 'albums' => $albums, 'total_songs' => $total_songs, 'wikipedia_link' => $wikipedia_link, 'top_tracks' => $top_tracks]);
+        return view('pages.profile', [
+            'artist' => $artist,
+            'albums' => $albums,
+            'total_songs' => $total_songs,
+            'wikipedia_link' => $wikipedia_link,
+            'top_tracks' => $top_tracks,
+            'related_artists' => $related_artists
+        ]);
     }
 
+    //Format the profile's url
     public function formatProfile($name){
         $term = str_replace(' ', '-', $name);
         return redirect('profile/'.$term);

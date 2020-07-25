@@ -58,6 +58,7 @@ class API extends Model
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Get artist from a name
     public function searchArtist($name){
         $results = $this->api->search($name, 'artist');
         $artists = $this->filterRealArtists($results->artists->items);
@@ -72,6 +73,7 @@ class API extends Model
         return $data;
     }
 
+    //Get an artist from his name
     public function getArtist($name){
         $results = $this->api->search($name, 'artist');
         $artist = $this->filterRealArtists($results->artists->items)[0];
@@ -79,6 +81,7 @@ class API extends Model
         return $artist;
     }
 
+    //Get the albums of an artist
     public function getAlbums($id){
         $albums = $this->api->getArtistAlbums($id, ['album_type' => 'album'])->items;
         $albums_unique = [];
@@ -95,10 +98,17 @@ class API extends Model
         return $albums_unique;
     }
 
+    //Get artist recommendation
+    public function getRelatedArtists($id){
+        return $this->api->getArtistRelatedArtists($id);
+    }
+
+    //Get the top tracks of an artist
     public function getArtistTopTrack($id){
         return $this->api->getArtistTopTracks($id, ['country' => 'US']);
     }
 
+    //Get artist's image from google, not really used anymore
     public function getProfilePictures($name){
         $images_list = GoogleImageGrabber::grab($name);
         while(sizeof($images_list)<5)

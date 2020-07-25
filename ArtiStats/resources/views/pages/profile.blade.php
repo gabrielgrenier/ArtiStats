@@ -73,6 +73,7 @@
                     </div>
                 </div>
             @endif
+
             @if(sizeof($top_tracks) != 0 && $top_tracks != null)
                 <div class="my-3">
                     <h2 class="text-bold">Top Tracks</h2>
@@ -84,7 +85,7 @@
                             <?php $index++ ?>
                             <tr>
                                 <td style="width: 2.5em;"><h5 class="text-bold top-track-margin">{{$index}}</h5></td>
-                                <td><img src="{{$top_track->album->images[2]->url}}" class="top-track-img"></td>
+                                <td><a href="#"><img src="{{$top_track->album->images[2]->url}}" class="top-track-img"></a></td>
                                 <td>
                                     <h5 class="text-bold top-track-margin"><a href="#" class="profile-link">{{$top_track->name}}</a></h5>
                                 </td>
@@ -103,7 +104,24 @@
                     </table>
                 </div>
             @endif
+
+            @if($related_artists !== null)
+                <div class="my-5 text-center">
+                    <h2 class="text-bold">Related Artists</h2>
+                    <div class="under-line-block mb-4 mx-auto"></div>
+                    <div class="row">
+                        @foreach($related_artists as $related_artist)
+                            <a class="col-md-4 text-center mb-5 related-artist-link" href="#">
+                                <div class="related-artist-picture" style="background-image: url('{{$related_artist->images[1]->url}}')"></div>
+                                <h5 class="text-bold">{{$related_artist->name}}</h5>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
+
+
 
 @endsection

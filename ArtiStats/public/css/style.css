@@ -253,6 +253,13 @@
     font-size: 2em;
 }
 
+.under-line-block-lg{
+    margin-top: -1em;
+    height: 1.3em;
+    background-color: #00d461;
+    width: 8em;
+}
+
 /* PROFILE */
 .profile-header{
     height: 13em;
@@ -276,6 +283,27 @@
     border-width: 3px;
     border-color: white;
     margin: -6em auto auto auto;
+}
+
+.related-artist-picture{
+    height: 8em;
+    width: 8em;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    transition: 0.3s;
+}
+.related-artist-link{
+    color: #212121;
+    transition: 0.3s;
+}
+.related-artist-link:hover{
+    color: #4A4A4A;
+    text-decoration: none;
+}
+.related-artist-link:hover .related-artist-picture {
+    opacity: 0.8;
 }
 
 .profile-header-filter{
@@ -340,6 +368,10 @@
 
 .top-track-img{
     width: 3em;
+    transition: 0.3s;
+}
+.top-track-img:hover {
+    opacity: 0.8;
 }
 
 .top-track-link{
