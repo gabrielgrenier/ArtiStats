@@ -63,7 +63,7 @@
                     <div class="under-line-block mb-4"></div>
                     <div class="row">
                         @foreach($albums as $album)
-                            <div class="col-lg-3 mb-4">
+                            <div class="col-lg-3 col-md-4 col-6 mb-4">
                                 <a href="https://www.google.com" class="profile-album-link">
                                     <img src="{{$album->images[0]->url}}" class="albumThumbnail"/>
                                     <h5 class="mt-2">{{$album->name}}</h5>
@@ -75,7 +75,7 @@
             @endif
 
             @if(sizeof($top_tracks) != 0 && $top_tracks != null)
-                <div class="my-3">
+                <div class="my-3" style="overflow: auto;">
                     <h2 class="text-bold">Top Tracks</h2>
                     <div class="under-line-block mb-4"></div>
                     <table class="table table-tracks-hover">
@@ -84,7 +84,7 @@
                         @foreach($top_tracks as $top_track)
                             <?php $index++ ?>
                             <tr>
-                                <td style="width: 2.5em;"><h5 class="text-bold top-track-margin">{{$index}}</h5></td>
+                                <td style="width: 3em;"><h5 class="text-bold top-track-margin">{{$index}}</h5></td>
                                 <td><a href="#"><img src="{{$top_track->album->images[2]->url}}" class="top-track-img"></a></td>
                                 <td>
                                     <h5 class="text-bold top-track-margin"><a href="#" class="profile-link">{{$top_track->name}}</a></h5>
@@ -111,7 +111,7 @@
                     <div class="under-line-block mb-4 mx-auto"></div>
                     <div class="row">
                         @foreach($related_artists as $related_artist)
-                            <a class="col-md-4 text-center mb-5 related-artist-link" href="#">
+                            <a class="col-md-4 col-6 text-center mb-5 related-artist-link" href="{{url('format/profile/'.$related_artist->name)}}">
                                 <div class="related-artist-picture" style="background-image: url('{{$related_artist->images[1]->url}}')"></div>
                                 <h5 class="text-bold">{{$related_artist->name}}</h5>
                             </a>

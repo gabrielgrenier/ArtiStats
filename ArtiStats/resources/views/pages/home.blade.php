@@ -5,14 +5,14 @@
 @section('content')
 <body>
 
-    <div class="width100 parallax homeParallax">
+    <div class="width100 parallax homeParallax pt-lg-5 pt-md-5 pb-2">
         <div class="container-fluid">
-            <div class="parallaxCont">
-                <div class="row">
-                    <div class="col-lg-4 offset-lg-2">
+            <div class="parallaxCont mt-md-5 pt-md-5">
+                <div class="row pt-lg-5 pb-lg-3 mt-lg-5">
+                    <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1 offset-lg-2">
                         <img  src="{{asset('images/statsBoardPlace.jpg')}}" id="parallaxBoard">
                     </div>
-                    <div class="col-lg-4" id="parallaxInfo">
+                    <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1 m-auto pt-md-0 pt-4">
                         <h1>Artists Statistics</h1>
                         <p>
                             AtriStats enable you to find statistic about artists and their songs. Wanna know which words
@@ -22,11 +22,11 @@
                     </div>
                 </div>
             </div>
-            <div id="parallaxLinkCont">
-                <div class="row">
-                    <div class="col-lg-4"><a href="#MoreStatistics" class="parallaxLink">More Statistics</a></div>
-                    <div class="col-lg-4"><a href="#OpenSource" class="parallaxLink">Open Source</a></div>
-                    <div class="col-lg-4"><a href="#ArtistInformation" class="parallaxLink">Artist Information</a></div>
+            <div class="parallax-link-cont d-md-block d-none">
+                <div class="row pt-lg-4">
+                    <div class="col-sm-4 parallaxLink-cont"><a href="#MoreStatistics" class="parallaxLink">More Statistics</a></div>
+                    <div class="col-sm-4 parallaxLink-cont"><a href="#OpenSource" class="parallaxLink">Open Source</a></div>
+                    <div class="col-sm-4 parallaxLink-cont"><a href="#ArtistInformation" class="parallaxLink">Artist Information</a></div>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                     </p>
                 </div>
                 <div class="col-md-7 text-center">
-                    <img src="{{asset('images/code_home.png')}}" class="w-75 white-border-img"/>
+                    <img src="{{asset('images/code_home.png')}}" class="w-75 white-border-img d-lg-block d-sm-none"/>
                 </div>
             </div>
         </div>
@@ -84,7 +84,7 @@
                 <div class="col-lg-7" style="margin: auto">
                     <h1>Start getting more stats about your music now!</h1>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-5 pt-md-5">
                     <div class="cta-cont-top pt-2 pb-1 px-2 text-right">
                         <div class="cta-circle" style="background-color: #6EFF57;"></div>
                         <div class="cta-circle" style="background-color: #FFFF5D;"></div>
