@@ -1,3 +1,5 @@
+![Preview of ArtiStats](https://github.com/gabrielgrenier/ArtiStats/blob/master/screenshots/previewGit.png)
+
 # ArtiStats
 web application that let you get stats about artists and their songs.
 
