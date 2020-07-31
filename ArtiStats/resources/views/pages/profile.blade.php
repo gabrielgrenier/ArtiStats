@@ -64,7 +64,7 @@
                     <div class="row">
                         @foreach($albums as $album)
                             <div class="col-lg-3 col-md-4 col-6 mb-4">
-                                <a href="https://www.google.com" class="profile-album-link">
+                                <a href="{{url('album/'.$album->id)}}" class="profile-album-link">
                                     <img src="{{$album->images[0]->url}}" class="albumThumbnail"/>
                                     <h5 class="mt-2">{{$album->name}}</h5>
                                 </a>
