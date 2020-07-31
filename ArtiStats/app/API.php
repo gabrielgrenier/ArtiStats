@@ -134,4 +134,14 @@ class API extends Model
         return $images;
     }
 
+    //Get an album
+    public function getAlbum($id){
+        return $this->api->getAlbum($id);
+    }
+
+    //Get all songs from an album
+    public function getAlbumSongs($id){
+        return $this->api->getAlbumTracks($id);
+    }
+
 }

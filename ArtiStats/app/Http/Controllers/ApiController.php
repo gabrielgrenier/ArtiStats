@@ -72,4 +72,15 @@ class ApiController extends Controller{
         return redirect('profile/'.$term);
     }
 
+    //ALBUMS
+
+    public function showAlbumPage($id){
+        $api = new API();
+        $api->setupApi(); //SETUP IN CONSTRUCTOR INSTEAD DUMBASS !!!
+
+        $album = $api->getAlbum($id);
+        $songs = $api->getAlbumSongs($id);
+        return view('pages.album', ['album' => $album, 'songs' => $songs]);
+    }
+
 }

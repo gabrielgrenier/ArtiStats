@@ -389,3 +389,22 @@
     background-color: #ECFEE6;
 }
 
+/* ALBUM */
+.album-picture{
+    max-width: 8em;
+}
+
+.album-artist-link{
+    color: #00d461;
+    transition: 0.3s;
+}
+.album-artist-link:hover{
+    color: #00B551;
+    text-decoration: none;
+}
+
+.cont-footer{
+    background-color: #E8E8E8;
+    color: #1F1F1F;
+}
+

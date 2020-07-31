@@ -13,3 +13,6 @@ Route::post('format/search', 'ApiController@formatSearch')->name('FormatSearch')
 Route::get('profile/{name}', 'ApiController@profileArtist')->name('ArtistSearch');
 Route::get('format/profile/{name}', 'ApiController@formatProfile')->name('FormatSearch');
 Route::post('getAlbums', 'ApiController@getAlbums')->name('ajaxGetAlbums');
+
+//ALBUM
+Route::get('album/{id}', 'ApiController@showAlbumPage')->name('AlbumPage');
