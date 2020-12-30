@@ -3,7 +3,7 @@
 @section('metaOG')
 @endsection
 @section('content')
-    <div class="container">
+    <div class="container" @if(sizeof($data['artists']) < 7) style="height: 81vh;" @endif>
         <div class="page-title mb-0">Results</div>
         <div class="under-line-block-lg mb-4"></div>
         @if($data !== null)

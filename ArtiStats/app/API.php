@@ -11,8 +11,8 @@ use SpotifyWebAPI\SpotifyWebAPI;
 
 class API extends Model
 {
-    private $spotify_client_id = 'API_KEY';
-    private $spotify_client_secret = 'API_SECRET';
+    private $spotify_client_id = 'KEY';
+    private $spotify_client_secret = 'SECRET';
 
     private $session;
     private $api;
@@ -158,7 +158,7 @@ class API extends Model
         $url = $this->formatSongUrl($artist, $songName);
 
         //Tries to load the page and get lyrics if it loaded correctly
-        while($tries>0) {
+        while ($tries > 0) {
             $client = new Client();
             $crawler = $client->request('GET', $url);
             $lyricsDiv = $crawler->filter('.col-lg-8')->first();
@@ -172,7 +172,9 @@ class API extends Model
         //Format the lyrics
         $lyrics = strip_tags($lyrics);
         $lyrics = explode("\n\r", $lyrics);
-        $lyrics = array_filter($lyrics, function($value) { return !is_null($value) && $value !== ''; })[30];
+        $lyrics = array_filter($lyrics, function ($value) {
+            return !is_null($value) && $value !== '';
+        })[30];
         $lyrics = str_replace("\n", '<br/>', $lyrics);
 
         return $lyrics;
