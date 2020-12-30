@@ -73,14 +73,27 @@ class ApiController extends Controller{
     }
 
     //ALBUMS
-
     public function showAlbumPage($id){
         $api = new API();
-        $api->setupApi(); //SETUP IN CONSTRUCTOR INSTEAD DUMBASS !!!
+        $api->setupApi();
 
         $album = $api->getAlbum($id);
-        $songs = $api->getAlbumSongs($id);
+        $songs = $api->getAlbumSongs($id)->items;
         return view('pages.album', ['album' => $album, 'songs' => $songs]);
+    }
+
+    //SONGS
+    public function showSongPage($artist, $albumId, $songName){
+        $api = new API();
+        $api->setupApi();
+
+        //find a way to format the song name / artist here instead of the page
+        //add 404 if song not found
+
+        $album = $api->getAlbum($albumId);
+        $lyrics = $api->getLyrics($artist, $songName);
+        $lyrics = preg_replace("/<a href=.*?>(.*?)<\/a>/","",$lyrics);
+        return view('pages.song', ['lyrics' => $lyrics, 'album' => $album, 'songName' => $songName]);
     }
 
 }

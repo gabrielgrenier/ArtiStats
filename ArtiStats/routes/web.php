@@ -16,3 +16,5 @@ Route::post('getAlbums', 'ApiController@getAlbums')->name('ajaxGetAlbums');
 
 //ALBUM
 Route::get('album/{id}', 'ApiController@showAlbumPage')->name('AlbumPage');
+
+Route::get('{artist}/{albumId}/{songName}/lyrics', 'ApiController@showSongPage')->name('SongPage');

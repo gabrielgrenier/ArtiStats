@@ -4,14 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Goutte\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use Buchin\GoogleImageGrabber\GoogleImageGrabber;
 use SpotifyWebAPI\Session;
 use SpotifyWebAPI\SpotifyWebAPI;
 
 class API extends Model
 {
-    private $spotify_client_id = 'key';
-    private $spotify_client_secret = 'key';
+    private $spotify_client_id = 'API_KEY';
+    private $spotify_client_secret = 'API_SECRET';
 
     private $session;
     private $api;
@@ -54,6 +55,12 @@ class API extends Model
         }
 
         return $images;
+    }
+
+    public function formatSongUrl($artist, $songName){
+        $artist =  preg_replace("/[^a-zA-Z0-9]+/", "", $artist);
+        $songName =  preg_replace("/[^a-zA-Z0-9]+/", "", $songName);
+        return strtolower('https://www.azlyrics.com/lyrics/'.$artist.'/'.$songName.'.html');
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,4 +151,30 @@ class API extends Model
         return $this->api->getAlbumTracks($id);
     }
 
+    //Get the lyrics of a song from an artist
+    public function getLyrics($artist, $songName){
+        $tries = 10;
+        $lyrics = '';
+        $url = $this->formatSongUrl($artist, $songName);
+
+        //Tries to load the page and get lyrics if it loaded correctly
+        while($tries>0) {
+            $client = new Client();
+            $crawler = $client->request('GET', $url);
+            $lyricsDiv = $crawler->filter('.col-lg-8')->first();
+            if ($lyricsDiv->count() > 0) {
+                $lyrics = $lyricsDiv->first()->html();
+                $tries = 0;
+            }
+            $tries--;
+        }
+
+        //Format the lyrics
+        $lyrics = strip_tags($lyrics);
+        $lyrics = explode("\n\r", $lyrics);
+        $lyrics = array_filter($lyrics, function($value) { return !is_null($value) && $value !== ''; })[30];
+        $lyrics = str_replace("\n", '<br/>', $lyrics);
+
+        return $lyrics;
+    }
 }
