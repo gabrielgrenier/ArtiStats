@@ -33,12 +33,12 @@
                         <tbody>
                         @php
                             $index=0;
-                            $artistName = preg_replace("/[^a-zA-Z0-9]+/", '', $album->artists[0]->name);
+                            $artistName = preg_replace("/[^a-zA-Z0-9]+/", '-', $album->artists[0]->name);
                         @endphp
                         @foreach($songs as $track)
                             @php
                                 $index++;
-                                $trackName = preg_replace("/[^a-zA-Z0-9]+/", '', $track->name);
+                                $trackName = preg_replace("/[^a-zA-Z0-9]+/", '-', $track->name);
                             @endphp
                             <tr>
                                 <td style="width: 3em;"><h5 class="text-bold top-track-margin">{{$index}}</h5></td>

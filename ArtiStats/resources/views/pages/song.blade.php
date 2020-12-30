@@ -1,5 +1,5 @@
 @extends('default.layout')
-@section('title', 'song')
+@section('title', $songName)
 @section('metaOG')
 @endsection
 @section('content')

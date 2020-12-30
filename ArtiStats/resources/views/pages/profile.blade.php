@@ -80,14 +80,20 @@
                     <div class="under-line-block mb-4"></div>
                     <table class="table table-tracks-hover">
                         <tbody>
-                        <?php $index=0 ?>
+                        <?php
+                            $index=0;
+                            $artistName = preg_replace("/[^a-zA-Z0-9]+/", '-', $artist->name);
+                        ?>
                         @foreach($top_tracks as $top_track)
-                            <?php $index++ ?>
+                            <?php
+                                $index++;
+                                $trackName = preg_replace("/[^a-zA-Z0-9]+/", '-', $top_track->name);
+                            ?>
                             <tr>
                                 <td style="width: 3em;"><h5 class="text-bold top-track-margin">{{$index}}</h5></td>
-                                <td><a href="#"><img src="{{$top_track->album->images[2]->url}}" class="top-track-img"></a></td>
+                                <td><a href="{{url('album/'.$top_track->album->id)}}"><img src="{{$top_track->album->images[2]->url}}" class="top-track-img"></a></td>
                                 <td>
-                                    <h5 class="text-bold top-track-margin"><a href="#" class="profile-link">{{$top_track->name}}</a></h5>
+                                    <h5 class="text-bold top-track-margin"><a href="{{url($artistName.'/'.$top_track->album->id.'/'.$trackName.'/lyrics')}}" class="profile-link">{{$top_track->name}}</a></h5>
                                 </td>
                                 <td>
                                     @if($top_track->explicit === true)
