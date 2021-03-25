@@ -11,8 +11,8 @@ use SpotifyWebAPI\SpotifyWebAPI;
 
 class API extends Model
 {
-    private $spotify_client_id = 'KEY';
-    private $spotify_client_secret = 'SECRET';
+    private $spotify_client_id = '4a375a1bc9ce48bf819c19afa407a45b';
+    private $spotify_client_secret = '27d08ad55c0d4fc483c298d0e22a8790';
 
     private $session;
     private $api;
