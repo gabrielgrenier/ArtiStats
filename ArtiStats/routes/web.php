@@ -1,4 +1,6 @@
 <?php
+
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 //home
@@ -18,3 +20,4 @@ Route::post('getAlbums', 'ApiController@getAlbums')->name('ajaxGetAlbums');
 Route::get('album/{id}', 'ApiController@showAlbumPage')->name('AlbumPage');
 
 Route::get('{artist}/{albumId}/{songName}/lyrics', 'ApiController@showSongPage')->name('SongPage');
+
