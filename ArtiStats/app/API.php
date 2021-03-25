@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Goutte\Client;
 use GuzzleHttp\Client as GuzzleClient;
 use Buchin\GoogleImageGrabber\GoogleImageGrabber;
+use Illuminate\Support\Facades\Http;
 use SpotifyWebAPI\Session;
 use SpotifyWebAPI\SpotifyWebAPI;
 
 class API extends Model
 {
-    private $spotify_client_id = '4a375a1bc9ce48bf819c19afa407a45b';
-    private $spotify_client_secret = '27d08ad55c0d4fc483c298d0e22a8790';
+    private $spotify_client_id = 'SPOTIFY_API';
+    private $spotify_client_secret = 'SPOTIFY_SECRET';
+    private $musix_match_id = 'MUSIX_API';
 
     private $session;
     private $api;
@@ -63,6 +65,8 @@ class API extends Model
         return strtolower('https://www.azlyrics.com/lyrics/'.$artist.'/'.$songName.'.html');
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // SPOTIFY
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //Get artist from a name
@@ -115,6 +119,78 @@ class API extends Model
         return $this->api->getArtistTopTracks($id, ['country' => 'US']);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // MUSIX MATCH
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Get a artist from MusixMatch's API
+    public function getMusixArtist($name){
+        $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.search?format=jsonp&callback=callback&q_artist='.$name.'&page_size=50&apikey='.$this->musix_match_id);
+        $response_json = json_decode($this->formatMusixResponse($response))->message->body->artist_list;
+
+        if(sizeof($response_json)<= 0)
+            return null;
+
+        $artist = null;
+        foreach($response_json as $artist_temp){
+            if(strtoupper($artist_temp->artist->artist_name) == strtoupper($name))
+                $artist = $artist_temp->artist;
+        }
+
+        if($artist != null)
+            return $artist;
+
+        //If there was no perfect match
+        usort($response_json, function($a, $b) {
+            return $a->artist->artist_rating > $b->artist->artist_rating ? -1 : 1;
+        });
+
+        return $response_json[0]->artist;
+    }
+
+    //Get a track from MusixMatch's API
+    public function getMusixTrack($artist, $track_name){
+        $response = Http::get('https://api.musixmatch.com/ws/1.1/track.search?format=jsonp&callback=callback&q_track='.$track_name.'&q_artist='.$artist->artist_name.'&f_artist_id='.$artist->artist_id.'&s_track_rating=true&apikey='.$this->musix_match_id);
+        $response_json = json_decode($this->formatMusixResponse($response))->message->body->track_list;
+
+        if(sizeof($response_json)<= 0)
+            return null;
+
+        $track = null;
+        foreach($response_json as $track_temp){
+            if(strtoupper($track_temp->track->track_name) == strtoupper($track_name) && $track_temp->track->artist_id == $artist->artist_id)
+                $track = $track_temp->track;
+        }
+
+        if($track != null)
+            return $track;
+
+        //If there was no perfect match
+        return $response_json[0]->track;
+    }
+
+    //Get the lyrics of a song from an artist
+    public function getMusixLyrics($track){
+        if(!$track->has_lyrics)
+            return null;
+
+        $response = Http::get('https://api.musixmatch.com/ws/1.1/track.lyrics.get?format=jsonp&callback=callback&track_id='.$track->track_id.'&commontrack_id='.$track->commontrack_id.'&apikey=858a5945700cb1dc92dd0591fb886f1c');
+        $response_lyrics = json_decode($this->formatMusixResponse($response))->message->body->lyrics;
+
+        return $response_lyrics->lyrics_body;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // OTHERS
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Format the reponse of MusixMatch's API
+    public function formatMusixResponse($response){
+        $response_json = str_replace('callback(', '', $response->body());
+        $response_json = str_replace(');', '', $response_json);
+        return $response_json;
+    }
+
     //Get artist's image from google, not really used anymore
     public function getProfilePictures($name){
         $images_list = GoogleImageGrabber::grab($name);
@@ -151,7 +227,6 @@ class API extends Model
         return $this->api->getAlbumTracks($id);
     }
 
-    //Get the lyrics of a song from an artist
     public function getLyrics($artist, $songName){
         $tries = 10;
         $lyrics = '';
@@ -179,4 +254,6 @@ class API extends Model
 
         return $lyrics;
     }
+
+
 }
