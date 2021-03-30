@@ -104,15 +104,14 @@ class ApiController extends Controller{
             $api = new API();
             $api->setupApi();
 
-            $artistFormatted = str_replace('-', '', $artist);
-            $songNameFormatted = str_replace('-', '', $songName);
-            $songName = str_replace('-', ' ', $songName);
+            $artistFormatted = str_replace(' ', '-', $artist);
+            $songNameFormatted = str_replace(' ', '-', $songName);
 
             $album = $api->getAlbum($albumId);
-            $lyrics = $api->getLyrics($artistFormatted, $songNameFormatted);
+            $res = $api->getLyrics($artistFormatted, $songNameFormatted);
+            $lyrics = $res[0];
 
-            $lyrics = preg_replace("/<a href=.*?>(.*?)<\/a>/","",$lyrics);
-            return view('pages.song', ['lyrics' => $lyrics, 'album' => $album, 'songName' => $songName]);
+            return view('pages.song', ['lyrics' => $lyrics, 'album' => $album, 'songName' => str_replace('-', ' ', $songName), 'songDesc' => $res[1]]);
         } catch (\Exception $e){
             abort(404);
         }

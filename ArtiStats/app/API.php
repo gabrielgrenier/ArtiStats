@@ -12,9 +12,9 @@ use SpotifyWebAPI\SpotifyWebAPI;
 
 class API extends Model
 {
-    private $spotify_client_id = 'SPOTIFY_API';
-    private $spotify_client_secret = 'SPOTIFY_SECRET';
-    private $musix_match_id = 'MUSIX_API';
+    private $spotify_client_id = 'KEY';
+    private $spotify_client_secret = 'KEY';
+    private $musix_match_id = 'KEY';
 
     private $session;
     private $api;
@@ -60,9 +60,20 @@ class API extends Model
     }
 
     public function formatSongUrl($artist, $songName){
-        $artist =  preg_replace("/[^a-zA-Z0-9]+/", "", $artist);
-        $songName =  preg_replace("/[^a-zA-Z0-9]+/", "", $songName);
-        return strtolower('https://www.azlyrics.com/lyrics/'.$artist.'/'.$songName.'.html');
+        //Find a better solution
+        if(str_contains($songName, 'feat'))
+            $songName = substr($songName, 0, strpos($songName, 'feat'));
+        if(str_contains($songName, 'ft'))
+            $songName = substr($songName, 0, strpos($songName, 'ft'));
+        if(str_contains($songName, 'Feat'))
+            $songName = substr($songName, 0, strpos($songName, 'feat'));
+        if(str_contains($songName, 'Ft'))
+            $songName = substr($songName, 0, strpos($songName, 'ft'));
+
+        if($songName[strlen($songName)-1] == '-')
+            $songName = rtrim($songName, "-");
+
+        return strtolower('https://genius.com/'.$artist.'-'.$songName.'-lyrics');
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,6 +128,16 @@ class API extends Model
     //Get the top tracks of an artist
     public function getArtistTopTrack($id){
         return $this->api->getArtistTopTracks($id, ['country' => 'US']);
+    }
+
+    //Get an album
+    public function getAlbum($id){
+        return $this->api->getAlbum($id);
+    }
+
+    //Get all songs from an album
+    public function getAlbumSongs($id){
+        return $this->api->getAlbumTracks($id);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,46 +234,35 @@ class API extends Model
         $images[] = $images_list[$index2]['url'];
         */
 
-
         return $images;
     }
 
-    //Get an album
-    public function getAlbum($id){
-        return $this->api->getAlbum($id);
-    }
 
-    //Get all songs from an album
-    public function getAlbumSongs($id){
-        return $this->api->getAlbumTracks($id);
-    }
 
     public function getLyrics($artist, $songName){
         $tries = 10;
         $lyrics = '';
+        $desc = '';
         $url = $this->formatSongUrl($artist, $songName);
 
         //Tries to load the page and get lyrics if it loaded correctly
         while ($tries > 0) {
             $client = new Client();
             $crawler = $client->request('GET', $url);
-            $lyricsDiv = $crawler->filter('.col-lg-8')->first();
+            $lyricsDiv = $crawler->filter('.Lyrics__Container-sc-1ynbvzw-2')->first();
+            $descDiv = $crawler->filter('.SongDescription__Content-sc-615rvk-1 > .RichText__Container-oz284w-0')->first();
+
             if ($lyricsDiv->count() > 0) {
-                $lyrics = $lyricsDiv->first()->html();
+                $lyrics = preg_replace('#<a.*?>(.*?)</a>#i', '\1', $lyricsDiv->first()->html());
+                $lyrics = preg_replace('#<span.*?>(.*?)</span>#i', '\1', $lyrics);
+                $desc = preg_replace('#<a.*?>(.*?)</a>#i', '\1', $descDiv->first()->html());
+
                 $tries = 0;
             }
             $tries--;
         }
 
-        //Format the lyrics
-        $lyrics = strip_tags($lyrics);
-        $lyrics = explode("\n\r", $lyrics);
-        $lyrics = array_filter($lyrics, function ($value) {
-            return !is_null($value) && $value !== '';
-        })[30];
-        $lyrics = str_replace("\n", '<br/>', $lyrics);
-
-        return $lyrics;
+        return [$lyrics, $desc];
     }
 
 

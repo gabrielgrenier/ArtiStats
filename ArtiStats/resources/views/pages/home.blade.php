@@ -40,7 +40,7 @@
                 <h1>More Statistics</h1>
                 <p>
                     have you ever wanted to know more information about the music
-                    you listen to? ArtiStats allows you to know the most used words,
+                    you listen to? ArtiStats allows you to find the most used words,
                     the number of songs in an album, the repetition of a particular word and much more!
                 </p>
             </div>
@@ -71,8 +71,8 @@
             <div class="col-md-5 m-auto">
                 <h1>All of your favorite artists</h1>
                 <p>
-                    We are using Musixmatch's API to bring
-                    all the informations about your favorite artists.
+                    We are using Genius and Spotify's API to bring
+                    all the information about your favorite artists.
                 </p>
             </div>
         </div>
