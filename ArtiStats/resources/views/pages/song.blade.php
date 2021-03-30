@@ -5,12 +5,12 @@
 @section('content')
 
 <div class="container my-5 text-montserrat">
-    <div class="profile-body p-3">
+    <div class="profile-body px-3 py-4">
         <div class="px-3">
             <div class="media mb-4">
                 <img class="album-picture" src="{{$album->images[1]->url}}"/>
                 <div class="media-body pl-4">
-                    <h1 class="text-bold">{{$album->name}}</h1>
+                    <h1 class="text-bold">{{$songName}}</h1>
                     <h3>
                         By :
                         @php $index=0; @endphp
@@ -26,11 +26,15 @@
                     </h4>
                 </div>
             </div>
-
             <div>
-                <h2 class="text-bold">{{$songName}}</h2>
+                <h2 class="text-bold">Description</h2>
                 <div class="under-line-block mb-4"></div>
-                <div class="mt-n4">
+                {!! $songDesc !!}
+            </div>
+            <div>
+                <h2 class="text-bold">Lyrics</h2>
+                <div class="under-line-block mb-4"></div>
+                <div class="mt-n4 pt-4">
                     {!! $lyrics !!}
                 </div>
             </div>

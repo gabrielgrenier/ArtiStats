@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="container mt-5 text-montserrat">
-        <div class="profile-body p-3">
+        <div class="profile-body px-3 pt-4">
             <div class="px-3">
                 <div class="media mb-4">
                     <img class="album-picture" src="{{$album->images[1]->url}}"/>
@@ -26,7 +26,7 @@
                     </div>
                 </div>
 
-                <div class="my-3" style="overflow: auto;">
+                <div class="mt-3" style="overflow: auto;">
                     <h2 class="text-bold">Tracks</h2>
                     <div class="under-line-block mb-4"></div>
                     <table class="table table-tracks-hover w-100">
