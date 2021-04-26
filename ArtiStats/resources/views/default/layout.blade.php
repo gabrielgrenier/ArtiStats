@@ -34,11 +34,21 @@
     <!-- fontawsome -->
     <script src="https://kit.fontawesome.com/d1ae419275.js" crossorigin="anonymous"></script>
 </head>
-<body style="background-color: #f7f7f7;">
+<body
+    @if(!isset($errorPage) || isset($errorPage) && !$errorPage)
+        style="background-color: #f7f7f7;"
+    @else
+        style="background-color: #00d461;"
+    @endif
+>
 <div id="app">
     @include('default.header')
     @yield('content')
-    @include('default.footer')
+
+    @if(!isset($noFooter) || isset($noFooter) && !$noFooter)
+        @include('default.footer')
+    @endif
+
     @stack('scripts')
 </div>
 </body>
