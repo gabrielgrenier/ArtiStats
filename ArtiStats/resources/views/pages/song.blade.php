@@ -26,11 +26,13 @@
                     </h4>
                 </div>
             </div>
-            <div>
-                <h2 class="text-bold">Description</h2>
-                <div class="under-line-block mb-4"></div>
-                {!! $songDesc !!}
-            </div>
+            @if($songDesc)
+                <div class="song-desc-cont">
+                    <h2 class="text-bold">Description</h2>
+                    <div class="under-line-block mb-4"></div>
+                    {!! $songDesc !!}
+                </div>
+            @endif
             <div>
                 <h2 class="text-bold">Lyrics</h2>
                 <div class="under-line-block mb-4"></div>

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Goutte\Client;
 use GuzzleHttp\Client as GuzzleClient;
@@ -9,17 +10,22 @@ use Buchin\GoogleImageGrabber\GoogleImageGrabber;
 use Illuminate\Support\Facades\Http;
 use SpotifyWebAPI\Session;
 use SpotifyWebAPI\SpotifyWebAPI;
+use Symfony\Component\BrowserKit\HttpBrowser;
 
-class API extends Model
-{
-    private $spotify_client_id = 'KEY';
-    private $spotify_client_secret = 'KEY';
-    private $musix_match_id = 'KEY';
+class API extends Model {
+
+    private $spotify_client_id = '';
+    private $spotify_client_secret = '';
+
+    private $genius_client_id = '';
+    private $genius_client_secret = '';
+    private $genius_access_token = '';
 
     private $session;
-    private $api;
+    private $spotify_api;
+    private $genius_api;
 
-    public function setupApi(){
+    function __construct(){
         $this->session = new Session(
             $this->spotify_client_id,
             $this->spotify_client_secret
@@ -27,9 +33,25 @@ class API extends Model
         $this->session->requestCredentialsToken();
         $accessToken = $this->session->getAccessToken();
 
-        $this->api = new SpotifyWebAPI();
-        $this->api->setAccessToken($accessToken);
+        $this->spotify_api = new SpotifyWebAPI();
+        $this->spotify_api->setAccessToken($accessToken);
+
+        $authentication = new \Genius\Authentication\OAuth2(
+            $this->genius_client_id,
+            $this->genius_client_secret,
+            'https://github.com/gabrielgrenier/ArtiStats',
+            new \Genius\Authentication\Scope([
+                \Genius\Authentication\Scope::SCOPE_ME,
+                \Genius\Authentication\Scope::SCOPE_CREATE_ANNOTATION,
+                \Genius\Authentication\Scope::SCOPE_MANAGE_ANNOTATION,
+                \Genius\Authentication\Scope::SCOPE_VOTE,
+            ]),
+            null,
+        );
+        $authentication->setAccessToken($this->genius_access_token);
+        $this->genius_api = new \Genius\Genius($authentication);
     }
+
 
     public function filterRealArtists($artists){
         $list = [];
@@ -82,7 +104,7 @@ class API extends Model
 
     //Get artist from a name
     public function searchArtist($name){
-        $results = $this->api->search($name, 'artist');
+        $results = $this->spotify_api->search($name, 'artist');
         $artists = $this->filterRealArtists($results->artists->items);
 
         if(sizeof($artists)<=0){
@@ -97,7 +119,7 @@ class API extends Model
 
     //Get an artist from his name
     public function getArtist($name){
-        $results = $this->api->search($name, 'artist');
+        $results = $this->spotify_api->search($name, 'artist');
         $artist = $this->filterRealArtists($results->artists->items)[0];
 
         return $artist;
@@ -105,7 +127,7 @@ class API extends Model
 
     //Get the albums of an artist
     public function getAlbums($id){
-        $albums = $this->api->getArtistAlbums($id, ['album_type' => 'album'])->items;
+        $albums = $this->spotify_api->getArtistAlbums($id, ['album_type' => 'album'])->items;
         $albums_unique = [];
         foreach($albums as $album){
             $count = 0;
@@ -122,83 +144,65 @@ class API extends Model
 
     //Get artist recommendation
     public function getRelatedArtists($id){
-        return $this->api->getArtistRelatedArtists($id);
+        return $this->spotify_api->getArtistRelatedArtists($id);
     }
 
     //Get the top tracks of an artist
     public function getArtistTopTrack($id){
-        return $this->api->getArtistTopTracks($id, ['country' => 'US']);
+        return $this->spotify_api->getArtistTopTracks($id, ['country' => 'US']);
     }
 
     //Get an album
     public function getAlbum($id){
-        return $this->api->getAlbum($id);
+        return $this->spotify_api->getAlbum($id);
     }
 
     //Get all songs from an album
     public function getAlbumSongs($id){
-        return $this->api->getAlbumTracks($id);
+        return $this->spotify_api->getAlbumTracks($id);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // MUSIX MATCH
+    // GENIUS
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Get a artist from MusixMatch's API
-    public function getMusixArtist($name){
-        $response = Http::get('https://api.musixmatch.com/ws/1.1/artist.search?format=jsonp&callback=callback&q_artist='.$name.'&page_size=50&apikey='.$this->musix_match_id);
-        $response_json = json_decode($this->formatMusixResponse($response))->message->body->artist_list;
-
-        if(sizeof($response_json)<= 0)
-            return null;
-
-        $artist = null;
-        foreach($response_json as $artist_temp){
-            if(strtoupper($artist_temp->artist->artist_name) == strtoupper($name))
-                $artist = $artist_temp->artist;
-        }
-
-        if($artist != null)
-            return $artist;
-
-        //If there was no perfect match
-        usort($response_json, function($a, $b) {
-            return $a->artist->artist_rating > $b->artist->artist_rating ? -1 : 1;
-        });
-
-        return $response_json[0]->artist;
+    public function searchGenius(String $term){
+        return $this->genius_api->getSearchResource()->get($term)->response->hits;
     }
 
-    //Get a track from MusixMatch's API
-    public function getMusixTrack($artist, $track_name){
-        $response = Http::get('https://api.musixmatch.com/ws/1.1/track.search?format=jsonp&callback=callback&q_track='.$track_name.'&q_artist='.$artist->artist_name.'&f_artist_id='.$artist->artist_id.'&s_track_rating=true&apikey='.$this->musix_match_id);
-        $response_json = json_decode($this->formatMusixResponse($response))->message->body->track_list;
-
-        if(sizeof($response_json)<= 0)
-            return null;
-
-        $track = null;
-        foreach($response_json as $track_temp){
-            if(strtoupper($track_temp->track->track_name) == strtoupper($track_name) && $track_temp->track->artist_id == $artist->artist_id)
-                $track = $track_temp->track;
-        }
-
-        if($track != null)
-            return $track;
-
-        //If there was no perfect match
-        return $response_json[0]->track;
+    public function findGeniusSongUrl(String $artist, String $songName){
+        return $this->searchGenius($artist.' '.$songName)[0]->result->url;
     }
 
-    //Get the lyrics of a song from an artist
-    public function getMusixLyrics($track){
-        if(!$track->has_lyrics)
-            return null;
+    public function getLyrics($artist, $songName){
+        $tries = 20;
+        $lyrics = '';
+        $desc = '';
+        $url = $this->findGeniusSongUrl($artist, $songName);
 
-        $response = Http::get('https://api.musixmatch.com/ws/1.1/track.lyrics.get?format=jsonp&callback=callback&track_id='.$track->track_id.'&commontrack_id='.$track->commontrack_id.'&apikey=858a5945700cb1dc92dd0591fb886f1c');
-        $response_lyrics = json_decode($this->formatMusixResponse($response))->message->body->lyrics;
+        //Tries to load the page and get lyrics if it loaded correctly
+        while ($tries > 0) {
+            $client = new Client();
+            $crawler = $client->request('GET', $url);
+            $lyricsDiv = $crawler->filter('.Lyrics__Container-sc-1ynbvzw-2')->first();
+            $descDiv = $crawler->filter('.SongDescription__Content-sc-615rvk-1 > .RichText__Container-oz284w-0')->first();
 
-        return $response_lyrics->lyrics_body;
+            if ($lyricsDiv->count() > 0) {
+                $lyrics = preg_replace('#<a.*?>(.*?)</a>#i', '\1', $lyricsDiv->first()->html());
+                $lyrics = preg_replace('#<span.*?>(.*?)</span>#i', '\1', $lyrics);
+
+                try{
+                    $desc = preg_replace('#<a.*?>(.*?)</a>#i', '\1', $descDiv->first()->html());
+                } catch (Exception $e){
+                    $desc = null;
+                }
+
+                $tries = 0;
+            }
+            $tries--;
+        }
+
+        return [$lyrics, $desc];
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,31 +243,7 @@ class API extends Model
 
 
 
-    public function getLyrics($artist, $songName){
-        $tries = 10;
-        $lyrics = '';
-        $desc = '';
-        $url = $this->formatSongUrl($artist, $songName);
 
-        //Tries to load the page and get lyrics if it loaded correctly
-        while ($tries > 0) {
-            $client = new Client();
-            $crawler = $client->request('GET', $url);
-            $lyricsDiv = $crawler->filter('.Lyrics__Container-sc-1ynbvzw-2')->first();
-            $descDiv = $crawler->filter('.SongDescription__Content-sc-615rvk-1 > .RichText__Container-oz284w-0')->first();
-
-            if ($lyricsDiv->count() > 0) {
-                $lyrics = preg_replace('#<a.*?>(.*?)</a>#i', '\1', $lyricsDiv->first()->html());
-                $lyrics = preg_replace('#<span.*?>(.*?)</span>#i', '\1', $lyrics);
-                $desc = preg_replace('#<a.*?>(.*?)</a>#i', '\1', $descDiv->first()->html());
-
-                $tries = 0;
-            }
-            $tries--;
-        }
-
-        return [$lyrics, $desc];
-    }
 
 
 }

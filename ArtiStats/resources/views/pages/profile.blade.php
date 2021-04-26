@@ -117,7 +117,7 @@
                     <div class="under-line-block mb-4 mx-auto"></div>
                     <div class="row">
                         @foreach($related_artists as $related_artist)
-                            <a class="col-md-4 col-6 text-center mb-5 related-artist-link" href="{{url('format/profile/'.$related_artist->name)}}">
+                            <a class="col-md-4 col-6 text-center mb-3 related-artist-link" href="{{url('format/profile/'.$related_artist->name)}}">
                                 <div class="related-artist-picture" style="background-image: url('{{$related_artist->images[1]->url}}')"></div>
                                 <h5 class="text-bold">{{$related_artist->name}}</h5>
                             </a>

@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\API;
-use http\Env\Request;
 
-class ApiController extends Controller{
+class ApiController extends Controller {
+
+    private $api;
+
+    public function __construct(){
+        $this->api = new Api();
+    }
+
 
     //SEARCH
 
     //Search an artist
     public function searchArtist($name){
-        $api = new API();
-        $api->setupApi();
-        $data = $api->searchArtist($name);
+        $data = $this->api->searchArtist($name);
 
 
         if($data !== null && sizeof($data['artists']) === 1)
@@ -43,9 +47,7 @@ class ApiController extends Controller{
                 return redirect('profile/'.$term);
             }
 
-            $api = new API();
-            $api->setupApi();
-            $artist = $api->searchArtist($name)['artists'];
+            $artist = $this->api->searchArtist($name)['artists'];
 
             //causes error with certain names
             //if (sizeof($artist) > 1) {
@@ -54,9 +56,9 @@ class ApiController extends Controller{
             //}
 
             $artist = $artist[0];
-            $albums = $api->getAlbums($artist->id);
-            $top_tracks = $api->getArtistTopTrack($artist->id)->tracks;
-            $related_artists = array_slice($api->getRelatedArtists($artist->id)->artists, 0, 6, true);
+            $albums = $this->api->getAlbums($artist->id);
+            $top_tracks = $this->api->getArtistTopTrack($artist->id)->tracks;
+            $related_artists = array_slice($this->api->getRelatedArtists($artist->id)->artists, 0, 6, true);
 
             $total_songs = 0;
             foreach ($albums as $album) {
@@ -86,11 +88,8 @@ class ApiController extends Controller{
     //ALBUMS
     public function showAlbumPage($id){
         try {
-            $api = new API();
-            $api->setupApi();
-
-            $album = $api->getAlbum($id);
-            $songs = $api->getAlbumSongs($id)->items;
+            $album = $this->api->getAlbum($id);
+            $songs = $this->api->getAlbumSongs($id)->items;
             return view('pages.album', ['album' => $album, 'songs' => $songs]);
         } catch (\Exception $e){
             abort(404);
@@ -101,14 +100,11 @@ class ApiController extends Controller{
     //SONGS
     public function showSongPage($artist, $albumId, $songName){
         try {
-            $api = new API();
-            $api->setupApi();
+            $artistFormatted = str_replace('-', ' ', $artist);
+            $songNameFormatted = str_replace('-', ' ', $songName);
 
-            $artistFormatted = str_replace(' ', '-', $artist);
-            $songNameFormatted = str_replace(' ', '-', $songName);
-
-            $album = $api->getAlbum($albumId);
-            $res = $api->getLyrics($artistFormatted, $songNameFormatted);
+            $album = $this->api->getAlbum($albumId);
+            $res = $this->api->getLyrics($artistFormatted, $songNameFormatted);
             $lyrics = $res[0];
 
             return view('pages.song', ['lyrics' => $lyrics, 'album' => $album, 'songName' => str_replace('-', ' ', $songName), 'songDesc' => $res[1]]);
