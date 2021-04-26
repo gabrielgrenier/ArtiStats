@@ -179,16 +179,21 @@ class API extends Model {
         $lyrics = '';
         $desc = '';
         $url = $this->findGeniusSongUrl($artist, $songName);
-
         //Tries to load the page and get lyrics if it loaded correctly
         while ($tries > 0) {
             $client = new Client();
             $crawler = $client->request('GET', $url);
-            $lyricsDiv = $crawler->filter('.Lyrics__Container-sc-1ynbvzw-2')->first();
-            $descDiv = $crawler->filter('.SongDescription__Content-sc-615rvk-1 > .RichText__Container-oz284w-0')->first();
+
+            //old classes from genius website
+            //$lyricsDiv = $crawler->filter('.Lyrics__Container-sc-1ynbvzw-2')->first();
+            //$descDiv = $crawler->filter('.SongDescription__Content-sc-615rvk-1 > .RichText__Container-oz284w-0')->first();
+
+            $lyricsDiv = $crawler->filter('.lyrics')->first();
+            $descDiv = $crawler->filter('.rich_text_formatting')->first();
 
             if ($lyricsDiv->count() > 0) {
-                $lyrics = preg_replace('#<a.*?>(.*?)</a>#i', '\1', $lyricsDiv->first()->html());
+
+                $lyrics = preg_replace('/<\/?a[^>]*>/','',$lyricsDiv->first()->html());
                 $lyrics = preg_replace('#<span.*?>(.*?)</span>#i', '\1', $lyrics);
 
                 try{
