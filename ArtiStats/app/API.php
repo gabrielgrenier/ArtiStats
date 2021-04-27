@@ -20,7 +20,7 @@ class API extends Model {
     private $genius_client_id = '';
     private $genius_client_secret = '';
     private $genius_access_token = '';
-    
+
     private $session;
     private $spotify_api;
     private $genius_api;
@@ -50,52 +50,6 @@ class API extends Model {
         );
         $authentication->setAccessToken($this->genius_access_token);
         $this->genius_api = new \Genius\Genius($authentication);
-    }
-
-
-    public function filterRealArtists($artists){
-        $list = [];
-
-        foreach($artists as $artist){
-            $name = strtoupper($artist->name);
-            if(!(strpos($name, 'FEAT') || strpos($name, 'FEATURING')
-                || strpos($name, '&') || strpos($name, ' AND ') || strpos($name, 'BY')
-                || strpos($name, 'FT.') || strpos($name, 'PROD.') || strpos($name, 'PROD'))){
-
-                if($artist->popularity>=50)
-                    $list[] = $artist;
-            }
-        }
-        return $list;
-    }
-
-    public function getArtistsImg($artists){
-        $images = [];
-        $client = new Client();
-
-        foreach($artists as $artist){
-            $crawler = $client->request('GET', 'https://www.google.com/search?q='.$artist->artist->artist_name.'&tbm=isch');
-            $images[] = $crawler->filter('div > img')->first()->attr('src');
-        }
-
-        return $images;
-    }
-
-    public function formatSongUrl($artist, $songName){
-        //Find a better solution
-        if(str_contains($songName, 'feat'))
-            $songName = substr($songName, 0, strpos($songName, 'feat'));
-        if(str_contains($songName, 'ft'))
-            $songName = substr($songName, 0, strpos($songName, 'ft'));
-        if(str_contains($songName, 'Feat'))
-            $songName = substr($songName, 0, strpos($songName, 'feat'));
-        if(str_contains($songName, 'Ft'))
-            $songName = substr($songName, 0, strpos($songName, 'ft'));
-
-        if($songName[strlen($songName)-1] == '-')
-            $songName = rtrim($songName, "-");
-
-        return strtolower('https://genius.com/'.$artist.'-'.$songName.'-lyrics');
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,36 +168,73 @@ class API extends Model {
     // OTHERS
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Format the reponse of MusixMatch's API
-    public function formatMusixResponse($response){
-        $response_json = str_replace('callback(', '', $response->body());
-        $response_json = str_replace(');', '', $response_json);
-        return $response_json;
-    }
 
     //Get artist's image from google, not really used anymore
-    public function getProfilePictures($name){
-        $images_list = GoogleImageGrabber::grab($name);
-        while(sizeof($images_list)<5)
-            $images_list = GoogleImageGrabber::grab($name);
+    public function getCoverPicture($name){
+        try {
+            $images_list = GoogleImageGrabber::grab($name . ' 1920 x 1080');
 
-        $images[] = $images_list[0]['url'];
-        $images[] = $images_list[1]['url'];
+            $valid = false;
+            while ($valid == false) {
+                $random = rand(0, 60);
 
-        /*
-        $index1 = rand(0, 10);
-        $images[] = $images_list[$index1]['url'];
+                $image = $images_list[$random];
 
-        $index2 = rand(0, 10);
-        if($index2===$index1){
-            while($index2===$index1){
-                $index2 = rand(0, 10);
+                //Height and width are reversed
+                if ($image['height'] >= 1000 && $image['height'] <= 1980) {
+                    $valid = true;
+                }
+            }
+            return $image['url'];
+        } catch (Exception $e){
+            return null;
+        }
+    }
+
+
+    public function filterRealArtists($artists){
+        $list = [];
+
+        foreach($artists as $artist){
+            $name = strtoupper($artist->name);
+            if(!(strpos($name, 'FEAT') || strpos($name, 'FEATURING')
+                || strpos($name, '&') || strpos($name, ' AND ') || strpos($name, 'BY')
+                || strpos($name, 'FT.') || strpos($name, 'PROD.') || strpos($name, 'PROD'))){
+
+                if($artist->popularity>=50)
+                    $list[] = $artist;
             }
         }
-        $images[] = $images_list[$index2]['url'];
-        */
+        return $list;
+    }
+
+    public function getArtistsImg($artists){
+        $images = [];
+        $client = new Client();
+
+        foreach($artists as $artist){
+            $crawler = $client->request('GET', 'https://www.google.com/search?q='.$artist->artist->artist_name.'&tbm=isch');
+            $images[] = $crawler->filter('div > img')->first()->attr('src');
+        }
 
         return $images;
+    }
+
+    public function formatSongUrl($artist, $songName){
+        //Find a better solution
+        if(str_contains($songName, 'feat'))
+            $songName = substr($songName, 0, strpos($songName, 'feat'));
+        if(str_contains($songName, 'ft'))
+            $songName = substr($songName, 0, strpos($songName, 'ft'));
+        if(str_contains($songName, 'Feat'))
+            $songName = substr($songName, 0, strpos($songName, 'feat'));
+        if(str_contains($songName, 'Ft'))
+            $songName = substr($songName, 0, strpos($songName, 'ft'));
+
+        if($songName[strlen($songName)-1] == '-')
+            $songName = rtrim($songName, "-");
+
+        return strtolower('https://genius.com/'.$artist.'-'.$songName.'-lyrics');
     }
 
 

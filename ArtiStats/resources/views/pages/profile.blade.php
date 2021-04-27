@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="container mt-5 text-montserrat">
-        <div class="profile-header" style="background-image: url({{$artist->images[0]->url}}) !important;">
+        <div class="profile-header" style="background-image: url({{$cover_url}}) !important;">
             <div class="profile-header-filter" style="z-index: 0"></div>
         </div>
         <div class="profile-body p-3 mb-5">

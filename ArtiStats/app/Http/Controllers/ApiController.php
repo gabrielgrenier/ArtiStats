@@ -60,18 +60,24 @@ class ApiController extends Controller {
             $top_tracks = $this->api->getArtistTopTrack($artist->id)->tracks;
             $related_artists = array_slice($this->api->getRelatedArtists($artist->id)->artists, 0, 6, true);
 
+            $cover_url = $this->api->getCoverPicture($artist->name);
+            if($cover_url == null) //If there was an error with the grabber
+                $cover_url = $artist->images[0]->url;
+
             $total_songs = 0;
             foreach ($albums as $album) {
                 $total_songs += $album->total_tracks;
             }
             $wikipedia_link = 'https://en.wikipedia.org/wiki/' . str_replace(' ', '_', $artist->name);
+
             return view('pages.profile', [
                 'artist' => $artist,
                 'albums' => $albums,
                 'total_songs' => $total_songs,
                 'wikipedia_link' => $wikipedia_link,
                 'top_tracks' => $top_tracks,
-                'related_artists' => $related_artists
+                'related_artists' => $related_artists,
+                'cover_url' => $cover_url
             ]);
         } catch (\Exception $e){
             abort(404);

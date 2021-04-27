@@ -25,5 +25,8 @@ Route::get('album/{id}', 'ApiController@showAlbumPage')->name('AlbumPage');
 Route::get('{artist}/{albumId}/{songName}/lyrics', 'ApiController@showSongPage')->name('SongPage');
 
 Route::get('/test', function(){
-    return view('pages.errors.404');
+    $api = new Api();
+    $images = $api->getProfilePictures('trippie red');
+    dd($images);
+    //return view('pages.errors.404');
 });
