@@ -20,7 +20,7 @@ class API extends Model {
     private $genius_client_id = '';
     private $genius_client_secret = '';
     private $genius_access_token = '';
-
+    
     private $session;
     private $spotify_api;
     private $genius_api;
