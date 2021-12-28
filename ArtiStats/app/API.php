@@ -5,30 +5,21 @@ namespace App;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Goutte\Client;
-use GuzzleHttp\Client as GuzzleClient;
 use Buchin\GoogleImageGrabber\GoogleImageGrabber;
-use Illuminate\Support\Facades\Http;
 use SpotifyWebAPI\Session;
 use SpotifyWebAPI\SpotifyWebAPI;
-use Symfony\Component\BrowserKit\HttpBrowser;
 
 class API extends Model {
-
-    private $spotify_client_id = '';
-    private $spotify_client_secret = '';
-
-    private $genius_client_id = '';
-    private $genius_client_secret = '';
-    private $genius_access_token = '';
-
     private $session;
     private $spotify_api;
     private $genius_api;
 
     function __construct(){
+        parent::__construct();
+
         $this->session = new Session(
-            $this->spotify_client_id,
-            $this->spotify_client_secret
+            env('SPOTIFY_CLIENT_ID'),
+            env('SPOTIFY_CLIENT_SECRET')
         );
         $this->session->requestCredentialsToken();
         $accessToken = $this->session->getAccessToken();
@@ -37,8 +28,8 @@ class API extends Model {
         $this->spotify_api->setAccessToken($accessToken);
 
         $authentication = new \Genius\Authentication\OAuth2(
-            $this->genius_client_id,
-            $this->genius_client_secret,
+            env('genius_client_id'),
+            env('genius_client_secret'),
             'https://github.com/gabrielgrenier/ArtiStats',
             new \Genius\Authentication\Scope([
                 \Genius\Authentication\Scope::SCOPE_ME,
@@ -48,7 +39,7 @@ class API extends Model {
             ]),
             null,
         );
-        $authentication->setAccessToken($this->genius_access_token);
+        $authentication->setAccessToken(env('genius_access_token'));
         $this->genius_api = new \Genius\Genius($authentication);
     }
 
