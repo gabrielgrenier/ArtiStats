@@ -12,12 +12,10 @@
                         <h1 class="text-bold">{{$album->name}}</h1>
                         <h3>
                             By :
-                            @php $index=0; @endphp
                             @foreach($album->artists as $artist)
                                 <a href="{{url('format/profile/'.$artist->name)}}" class="album-artist-link">
-                                    {{$artist->name}}@if($index!==sizeof($album->artists)-1), @endif
+                                    {{$artist->name}}@if($loop->index!==sizeof($album->artists)-1), @endif
                                 </a>
-                                @php $index++; @endphp
                             @endforeach
                         </h3>
                         <h4>
@@ -32,16 +30,14 @@
                     <table class="table table-tracks-hover w-100">
                         <tbody>
                         @php
-                            $index=0;
                             $artistName = preg_replace("/[^a-zA-Z0-9]+/", '-', $album->artists[0]->name);
                         @endphp
                         @foreach($songs as $track)
                             @php
-                                $index++;
                                 $trackName = preg_replace("/[^a-zA-Z0-9]+/", '-', $track->name);
                             @endphp
                             <tr>
-                                <td style="width: 3em;"><h5 class="text-bold top-track-margin">{{$index}}</h5></td>
+                                <td style="width: 3em;"><h5 class="text-bold top-track-margin">{{$loop->index+1}}</h5></td>
                                 <td>
                                     <h5 class="text-bold top-track-margin"><a href="{{url($artistName.'/'.$album->id.'/'.$trackName.'/lyrics')}}" class="profile-link">{{$track->name}}</a></h5>
                                 </td>

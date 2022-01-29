@@ -19,12 +19,10 @@
                     <h1 class="text-bold">{{$songName}}</h1>
                     <h3>
                         By :
-                        @php $index=0; @endphp
                         @foreach($album->artists as $artist)
                             <a href="{{url('format/profile/'.$artist->name)}}" class="album-artist-link">
-                                {{$artist->name}}@if($index!==sizeof($album->artists)-1), @endif
+                                {{$artist->name}}@if($loop->index!==sizeof($album->artists)-1), @endif
                             </a>
-                            @php $index++; @endphp
                         @endforeach
                     </h3>
                     <h4>

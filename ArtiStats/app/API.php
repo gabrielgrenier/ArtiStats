@@ -52,10 +52,6 @@ class API extends Model {
         $results = $this->spotify_api->search($name, 'artist');
         $artists = $this->filterRealArtists($results->artists->items);
 
-        if(sizeof($artists)<=0){
-            return null;
-        }
-
         $data['artists'] = $artists;
         $data['term'] = $name;
 
@@ -124,23 +120,36 @@ class API extends Model {
         $lyrics = '';
         $desc = '';
         $url = $this->findGeniusSongUrl($artist, $songName);
+
         //Tries to load the page and get lyrics if it loaded correctly
         while ($tries > 0) {
             $client = new Client();
             $crawler = $client->request('GET', $url);
 
-            //old classes from genius website
-            //$lyricsDiv = $crawler->filter('.Lyrics__Container-sc-1ynbvzw-2')->first();
-            //$descDiv = $crawler->filter('.SongDescription__Content-sc-615rvk-1 > .RichText__Container-oz284w-0')->first();
+            //They keep changing the div class, need to find a solution, maybe filter LIKE (...)
+            $lyricsDiv = $crawler->filter('.Lyrics__Container-sc-1ynbvzw-6');
+            $descDiv = $crawler->filter('.SongDescription__Content-sc-615rvk-2 > .RichText__Container-oz284w-0')->first();
 
-            $lyricsDiv = $crawler->filter('.lyrics')->first();
-            $descDiv = $crawler->filter('.rich_text_formatting')->first();
 
+            //if we found at least one lyrics div
             if ($lyricsDiv->count() > 0) {
 
-                $lyrics = preg_replace('/<\/?a[^>]*>/','',$lyricsDiv->first()->html());
+                //return the divs in an array
+                $lyricsArr = $lyricsDiv->each(function($node) {
+                    return $node->html();
+                });
+
+                //Merge the divs content in one string
+                $lyricsTemp = '';
+                foreach($lyricsArr as $lyrics){
+                    $lyricsTemp = ($lyricsTemp=='') ? $lyrics : $lyricsTemp.'<br/>'.$lyrics;
+                }
+
+                //Remove useless tags
+                $lyrics = preg_replace('/<\/?a[^>]*>/','',$lyricsTemp);
                 $lyrics = preg_replace('#<span.*?>(.*?)</span>#i', '\1', $lyrics);
 
+                //Not every song has a description
                 try{
                     $desc = preg_replace('#<a.*?>(.*?)</a>#i', '\1', $descDiv->first()->html());
                 } catch (Exception $e){
