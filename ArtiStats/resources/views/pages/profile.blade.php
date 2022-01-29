@@ -29,14 +29,12 @@
                         <b>Genres : </b>
                     @endif
 
-                    @php($index=0)
                     @foreach($artist->genres as $genre)
-                        @if($index!==sizeof($artist->genres)-1)
+                        @if($loop->index!==sizeof($artist->genres)-1)
                             {{$genre}},
                         @else
                             {{$genre}}
                         @endif
-                        @php($index++)
                     @endforeach
                 </p>
                 <p class="information-sub">
@@ -81,16 +79,14 @@
                     <table class="table table-tracks-hover">
                         <tbody>
                         <?php
-                            $index=0;
                             $artistName = preg_replace("/[^a-zA-Z0-9]+/", '-', $artist->name);
                         ?>
                         @foreach($top_tracks as $top_track)
                             <?php
-                                $index++;
                                 $trackName = preg_replace("/[^a-zA-Z0-9]+/", '-', $top_track->name);
                             ?>
                             <tr>
-                                <td style="width: 3em;"><h5 class="text-bold top-track-margin">{{$index}}</h5></td>
+                                <td style="width: 3em;"><h5 class="text-bold top-track-margin">{{$loop->index+1}}</h5></td>
                                 <td><a href="{{url('album/'.$top_track->album->id)}}"><img src="{{$top_track->album->images[2]->url}}" class="top-track-img"></a></td>
                                 <td>
                                     <h5 class="text-bold top-track-margin"><a href="{{url($artistName.'/'.$top_track->album->id.'/'.$trackName.'/lyrics')}}" class="profile-link">{{$top_track->name}}</a></h5>

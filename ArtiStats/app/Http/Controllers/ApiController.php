@@ -19,7 +19,6 @@ class ApiController extends Controller {
     public function searchArtist($name){
         $data = $this->api->searchArtist($name);
 
-
         if($data !== null && sizeof($data['artists']) === 1)
             return redirect('format/profile/'.$data['artists'][0]->name);
 
